@@ -1,0 +1,22 @@
+{
+  "name": "sheetsee-tables",
+  "version": "0.0.0",
+  "description": "enables table creating functionality with sheetsee.js",
+  "main": "sheetsee-tables.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jlord/sheetsee-tables.git"
+  },
+  "author": "Jessica Lord",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/jlord/sheetsee-tables/issues"
+  },
+  "keywords": [
+    "spreadsheet",
+    "tables"
+  ],
+  "dependencies": {
+    "icanhaz": "~0.10.3",
+  },
+}
