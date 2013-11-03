@@ -2,7 +2,7 @@
   "name": "sheetsee-tables",
   "version": "0.0.0",
   "description": "enables table creating functionality with sheetsee.js",
-  "main": "sheetsee-tables.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/jlord/sheetsee-tables.git"
