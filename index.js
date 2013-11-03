@@ -1,7 +1,7 @@
 var ich = require('icanhaz')
 
 // Make Table, Sort and Filter Interactions
-modules.export.initiateTableFilter = function(data, filterDiv, tableDiv) {
+module.exports.initiateTableFilter = function(data, filterDiv, tableDiv) {
   $('.clear').on("click", function() {
     $(this.id + ".noMatches").css("visibility", "hidden")
     $(this.id + filterDiv).val("")
@@ -13,7 +13,7 @@ modules.export.initiateTableFilter = function(data, filterDiv, tableDiv) {
   })
 }
 
-modules.export.searchTable = function(data, searchTerm, tableDiv) {
+module.exports.searchTable = function(data, searchTerm, tableDiv) {
   var filteredList = []
   data.forEach(function(object) {
     var stringObject = JSON.stringify(object).toLowerCase()
@@ -29,7 +29,7 @@ modules.export.searchTable = function(data, searchTerm, tableDiv) {
   return filteredList
 }
 
-modules.export.sortThings = function(data, sorter, sorted, tableDiv) {
+module.exports.sortThings = function(data, sorter, sorted, tableDiv) {
   data.sort(function(a,b){
     if (a[sorter]<b[sorter]) return -1
     if (a[sorter]>b[sorter]) return 1
@@ -45,12 +45,12 @@ modules.export.sortThings = function(data, sorter, sorted, tableDiv) {
   $(header).attr("data-sorted", sorted)
 }
 
-modules.export.resolveDataTitle = function(string) {
+module.exports.resolveDataTitle = function(string) {
   var adjusted = string.toLowerCase().replace(/\s/g, '').replace(/\W/g, '')
   return adjusted
 }
 
-modules.export.sendToSort = function(event) {
+module.exports.sendToSort = function(event) {
   var tableDiv = "#" + $(event.target).closest("div").attr("id")
   console.log("came from this table",tableDiv)
   var sorted = $(event.target).attr("data-sorted")
@@ -63,7 +63,7 @@ modules.export.sendToSort = function(event) {
   Sheetsee.sortThings(gData, sorter, sorted, tableDiv)
 }
 
-modules.export.makeTable = function(data, targetDiv) {
+module.exports.makeTable = function(data, targetDiv) {
   var templateID = targetDiv.replace("#", "")
   var tableContents = ich[templateID]({
     rows: data

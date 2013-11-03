@@ -17,6 +17,6 @@
     "tables"
   ],
   "dependencies": {
-    "icanhaz": "~0.10.3",
-  },
+    "icanhaz": "~0.10.3"
+  }
 }
