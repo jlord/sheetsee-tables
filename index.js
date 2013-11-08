@@ -1,12 +1,9 @@
 var ich = require('icanhaz')
 
 module.exports.initiateTableFilter = function(opts) {
-  // console.log("Orig Data is", opts.data.length)
-  // var origData = opts.data
   $('.clear').on("click", function() { 
     $(this.id + ".noMatches").css("visibility", "hidden")
     $(this.id + opts.filterDiv).val("")
-    // opts.data = origData
     makeTable(opts)
   })
   $(opts.filterDiv).keyup(function(e) {
@@ -88,7 +85,6 @@ module.exports.makeTable = function(opts, filteredList) {
   if (opts.data.length > opts.pagination) setPreNext(opts.tableDiv, currentPage, currentPage, totalPages)
   
   $(document).on("click", (".pagination-next"), function() { 
-    // if (opts.filterDiv && $(opts.filterDiv).val().length === 0 ) console.log("unempty filter!")
     currentPage = currentPage + 1
     var nextPage = currentPage + 1
     currentStart = (currentPage * opts.pagination) - opts.pagination
