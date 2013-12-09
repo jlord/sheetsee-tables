@@ -14,9 +14,9 @@ module.exports.initiateTableFilter = function(opts) {
   })
 }
 
-module.exports.searchTable = function(filterDiv) {
-  $(filterDiv).HTML("<span class="clear button">Clear</span>
-    <span class="noMatches">no matches</span>")
+module.exports.injectFilterHTML = function(filterDiv) {
+  $("<span class='clear button'>Clear</span>" +
+  "<span class='noMatches'>no matches</span>").insertAfter(filterDiv)
 }
 
 module.exports.searchTable = function(opts, searchTerm) {
