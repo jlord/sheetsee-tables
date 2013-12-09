@@ -1,7 +1,8 @@
 var ich = require('icanhaz')
 
 module.exports.initiateTableFilter = function(opts) {
-  $('.clear').on("click", function() { 
+  injectFilterHTML(opts.filterDiv)
+  $('.clear').on("click", function() {
     $(this.id + ".noMatches").css("visibility", "hidden")
     $(this.id + opts.filterDiv).val("")
     makeTable(opts)
@@ -11,6 +12,11 @@ module.exports.initiateTableFilter = function(opts) {
     console.log(opts.data.length, text)
     searchTable(opts, text)
   })
+}
+
+module.exports.searchTable = function(filterDiv) {
+  $(filterDiv).HTML("<span class="clear button">Clear</span>
+    <span class="noMatches">no matches</span>")
 }
 
 module.exports.searchTable = function(opts, searchTerm) {
@@ -26,7 +32,7 @@ module.exports.searchTable = function(opts, searchTerm) {
   else {
     $(".noMatches").css("visibility", "hidden")
     makeTable(opts, filteredList)
-  } 
+  }
 }
 
 module.exports.sortThings = function(opts, sorter, sorted) {
@@ -38,7 +44,7 @@ module.exports.sortThings = function(opts, sorter, sorted) {
   })
   if (sorted === "descending") opts.data.reverse()
   makeTable(opts)
-  var header 
+  var header
   $(opts.tableDiv + " .tHeader").each(function(i, el){
     var contents = resolveDataTitle($(el).text())
     if (contents === sorter) header = el
@@ -73,7 +79,7 @@ module.exports.initiateTableSorter = function(options) {
 module.exports.makeTable = function(opts, filteredList) {
   if (filteredList) var data = filteredList
     else var data = opts.data
-      
+
   if (!opts.pagination) table(data, targetDiv)
   var allRows = data.length
   var totalPages = Math.floor(allRows / opts.pagination)
@@ -83,8 +89,8 @@ module.exports.makeTable = function(opts, filteredList) {
   var currentRows = data.slice(currentStart, currentEnd)
   table(currentRows, opts.tableDiv)
   if (opts.data.length > opts.pagination) setPreNext(opts.tableDiv, currentPage, currentPage, totalPages)
-  
-  $(document).on("click", (".pagination-next"), function() { 
+
+  $(document).on("click", (".pagination-next"), function() {
     currentPage = currentPage + 1
     var nextPage = currentPage + 1
     currentStart = (currentPage * opts.pagination) - opts.pagination
@@ -94,19 +100,19 @@ module.exports.makeTable = function(opts, filteredList) {
     setPreNext(opts.tableDiv, currentPage, currentPage, totalPages)
   })
 
-  $(document).on("click", (".pagination-pre"), function() { 
+  $(document).on("click", (".pagination-pre"), function() {
     currentPage = currentPage - 1
     var nextPage = currentPage + 1
     currentStart = (currentPage * opts.pagination) - opts.pagination
     currentEnd = currentPage * opts.pagination
-    currentRows = data.slice(currentStart, currentEnd) 
+    currentRows = data.slice(currentStart, currentEnd)
     table(currentRows, opts.tableDiv)
     setPreNext(opts.tableDiv, currentPage, currentPage, totalPages)
   })
 }
 
 module.exports.setPreNext = function(targetDiv, currentPage, currentPage, totalPages) {
-  $(targetDiv).append("<div id='Pagination' pageno='" + currentPage + "'" + "class='table-pagination'>Showing page " 
+  $(targetDiv).append("<div id='Pagination' pageno='" + currentPage + "'" + "class='table-pagination'>Showing page "
     + currentPage + " of " + totalPages + " <a class='pagination-pre'>Previous</a>" +
     " <a class='pagination-next'>Next</a></p></div>" )
 }
