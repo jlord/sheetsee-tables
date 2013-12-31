@@ -1,7 +1,6 @@
 var ich = require('icanhaz')
 
 module.exports.initiateTableFilter = function(opts) {
-  injectFilterHTML(opts.filterDiv)
   $('.clear').on("click", function() {
     $(this.id + ".noMatches").css("visibility", "hidden")
     $(this.id + opts.filterDiv).val("")
@@ -14,12 +13,8 @@ module.exports.initiateTableFilter = function(opts) {
   })
 }
 
-module.exports.injectFilterHTML = function(filterDiv) {
-  $("<span class='clear button'>Clear</span>" +
-  "<span class='noMatches'>no matches</span>").insertAfter(filterDiv)
-}
-
-module.exports.searchTable = function(opts, searchTerm) {
+module.exports.searchTable = searchTable
+function searchTable(opts, searchTerm) {
   var filteredList = []
   opts.data.forEach(function(object) {
     var stringObject = JSON.stringify(object).toLowerCase()
@@ -76,52 +71,108 @@ module.exports.initiateTableSorter = function(options) {
   }
 }
 
-module.exports.makeTable = function(opts, filteredList) {
+module.exports.makeTable = makeTable
+function makeTable(opts, filteredList) {
   if (filteredList) var data = filteredList
     else var data = opts.data
-
-  if (!opts.pagination) table(data, targetDiv)
+  var tableId = opts.tableDiv.slice(1)
+  if (!opts.pagination) table(data, opts.targetDiv)
   var allRows = data.length
-  var totalPages = Math.floor(allRows / opts.pagination)
+  var totalPages = Math.ceil(allRows / opts.pagination)
   var currentPage = 1
   var currentStart = (currentPage * opts.pagination) - opts.pagination
   var currentEnd = currentPage * opts.pagination
   var currentRows = data.slice(currentStart, currentEnd)
   table(currentRows, opts.tableDiv)
-  if (opts.data.length > opts.pagination) setPreNext(opts.tableDiv, currentPage, currentPage, totalPages)
+  if (opts.data.length > opts.pagination) writePreNext(opts.tableDiv, currentPage, currentPage, totalPages, data, opts.pagination)
+  
+}
 
-  $(document).on("click", (".pagination-next"), function() {
+module.exports.setPagClicks = setPagClicks
+function setPagClicks(data, tableId, currentPage, pagination, totalPages) {
+  console.log(currentPage)
+  $(".pagination-pre-" + tableId).addClass("no-pag")
+    
+  $(document).on("click", (".pagination-next-" + tableId), function() {
+    if ($(this).hasClass("no-pag")) return
+
     currentPage = currentPage + 1
     var nextPage = currentPage + 1
-    currentStart = (currentPage * opts.pagination) - opts.pagination
-    currentEnd = currentPage * opts.pagination
-    currentRows = data.slice(currentStart, currentEnd)
-    table(currentRows, opts.tableDiv)
-    setPreNext(opts.tableDiv, currentPage, currentPage, totalPages)
-  })
+    currentStart = (currentPage * pagination) - pagination
+    currentEnd = currentPage * pagination
 
-  $(document).on("click", (".pagination-pre"), function() {
+    if (currentPage >= totalPages) {
+      currentRows = data.slice(currentStart, currentEnd)
+      table(currentRows, "#" + tableId)
+      setPreNext("#" + tableId, currentPage, currentPage, totalPages)
+      $(".pagination-next-" + tableId).addClass("no-pag")
+      $(".pagination-next-" + tableId)
+    }
+    else {
+      currentRows = data.slice(currentStart, currentEnd)
+      table(currentRows, "#" + tableId)
+      setPreNext("#" + tableId, currentPage, currentPage, totalPages)
+    }
+})
+
+  $(document).on("click", (".pagination-pre-" + tableId), function() {
+    console.log(this)
+    if (currentPage > 1) $(this).removeClass("no-pag")
+    if ($(this).hasClass("no-pag")) return
+
+    // if ((currentPage) === 2) {
+    //   $(".pagination-pre-" + tableId).addClass("no-pag"); console.log("on page one!", currentPage)
+    // }
+
     currentPage = currentPage - 1
+    // console.log("current", currentPage)
     var nextPage = currentPage + 1
-    currentStart = (currentPage * opts.pagination) - opts.pagination
-    currentEnd = currentPage * opts.pagination
-    currentRows = data.slice(currentStart, currentEnd)
-    table(currentRows, opts.tableDiv)
-    setPreNext(opts.tableDiv, currentPage, currentPage, totalPages)
+    currentStart = (currentPage * pagination) - pagination
+    currentEnd = currentPage * pagination
+
+    // currentRows = data.slice(currentStart, currentEnd)
+    // table(currentRows, "#" + tableId)
+    // setPreNext("#" + tableId, currentPage, currentPage, totalPages)
+
+    if (currentPage === 1) {
+      currentRows = data.slice(currentStart, currentEnd)
+      table(currentRows, "#" + tableId)
+      setPreNext("#" + tableId, currentPage, currentPage, totalPages)
+      $(".pagination-pre-" + tableId).addClass("no-pag")
+    }
+    else {
+      currentRows = data.slice(currentStart, currentEnd)
+      table(currentRows, "#" + tableId)
+      setPreNext("#" + tableId, currentPage, currentPage, totalPages)
+    }
+    
   })
 }
 
-module.exports.setPreNext = function(targetDiv, currentPage, currentPage, totalPages) {
+module.exports.setPreNext = setPreNext
+function  setPreNext(targetDiv, currentPage, currentPage, totalPages, data, pagination) {
+  var tableId = targetDiv.slice(1)
   $(targetDiv).append("<div id='Pagination' pageno='" + currentPage + "'" + "class='table-pagination'>Showing page "
-    + currentPage + " of " + totalPages + " <a class='pagination-pre'>Previous</a>" +
-    " <a class='pagination-next'>Next</a></p></div>" )
+    + currentPage + " of " + totalPages + " <a class='pagination-pre-" + tableId + "'>Previous</a>" +
+    " <a class='pagination-next-" + tableId + "'>Next</a></p></div>" )
 }
 
-module.exports.clearPreNExt = function() {
+module.exports.writePreNext = writePreNext
+function  writePreNext(targetDiv, currentPage, currentPage, totalPages, data, pagination) {
+  var tableId = targetDiv.slice(1)
+  $(targetDiv).append("<div id='Pagination' pageno='" + currentPage + "'" + "class='table-pagination'>Showing page "
+    + currentPage + " of " + totalPages + " <a class='pagination-pre-" + tableId + "'>Previous</a>" +
+    " <a class='pagination-next-" + tableId + "'>Next</a></p></div>" )
+  setPagClicks(data, tableId, currentPage, pagination, totalPages)
+}
+
+module.exports.clearPreNext = clearPreNext
+function clearPreNext() {
   $(".table-pagination").attr("display", "none")
 }
 
-module.exports.table = function(data, targetDiv) {
+module.exports.table = table
+function table(data, targetDiv) {
   var templateID = targetDiv.replace("#", "")
   var tableContents = ich[templateID]({
     rows: data
