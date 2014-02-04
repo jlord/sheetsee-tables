@@ -8,7 +8,6 @@ module.exports.initiateTableFilter = function(opts) {
   })
   $(opts.filterDiv).keyup(function(e) {
     var text = $(e.target).val()
-    console.log(opts.data.length, text)
     searchTable(opts, text)
   })
 }
@@ -29,9 +28,8 @@ function searchTable(opts, searchTerm) {
     makeTable(opts, filteredList)
   }
 }
-
-module.exports.sortThings = function(opts, sorter, sorted) {
-  console.log("here is data", opts.data)
+module.exports.sortThings = sortThings
+function sortThings(opts, sorter, sorted) {
   opts.data.sort(function(a,b){
     if (a[sorter]<b[sorter]) return -1
     if (a[sorter]>b[sorter]) return 1
@@ -47,17 +45,17 @@ module.exports.sortThings = function(opts, sorter, sorted) {
   $(header).attr("data-sorted", sorted)
 }
 
-module.exports.resolveDataTitle = function(string) {
+module.exports.resolveDataTitle = resolveDataTitle
+function resolveDataTitle(string) {
   var adjusted = string.toLowerCase().replace(/\s/g, '').replace(/\W/g, '')
   return adjusted
 }
-
-module.exports.initiateTableSorter = function(options) {
-  var sortInfo = $(document).on("click", ".tHeader", sendToSort)
+module.exports.initiateTableSorter = initiateTableSorter
+function initiateTableSorter(options) {
+  $(document).on("click", ".tHeader", sendToSort)
 
   function sendToSort(event) {
     var tableDiv = "#" + $(event.target).closest("div").attr("id")
-    console.log("came from this table",tableDiv)
     var sorted = $(event.target).attr("data-sorted")
     if (sorted) {
       if (sorted === "descending") sorted = "ascending"
@@ -66,13 +64,14 @@ module.exports.initiateTableSorter = function(options) {
     else { sorted = "ascending" }
     var sorter = resolveDataTitle(event.target.innerHTML)
     var sortInfo = {"sorter": sorter, "sorted": sorted, "tableDiv": tableDiv}
-    console.log(sortInfo)
     sortThings(options, sorter, sorted, tableDiv)
   }
 }
 
 module.exports.makeTable = makeTable
 function makeTable(opts, filteredList) {
+  initiateTableSorter(opts)
+  
   if (filteredList) var data = filteredList
     else var data = opts.data
   var tableId = opts.tableDiv.slice(1)
@@ -90,7 +89,6 @@ function makeTable(opts, filteredList) {
 
 module.exports.setPagClicks = setPagClicks
 function setPagClicks(data, tableId, currentPage, pagination, totalPages) {
-  console.log(currentPage)
   $(".pagination-pre-" + tableId).addClass("no-pag")
     
   $(document).on("click", (".pagination-next-" + tableId), function() {
@@ -116,7 +114,6 @@ function setPagClicks(data, tableId, currentPage, pagination, totalPages) {
 })
 
   $(document).on("click", (".pagination-pre-" + tableId), function() {
-    console.log(this)
     if (currentPage > 1) $(this).removeClass("no-pag")
     if ($(this).hasClass("no-pag")) return
 
@@ -125,7 +122,6 @@ function setPagClicks(data, tableId, currentPage, pagination, totalPages) {
     // }
 
     currentPage = currentPage - 1
-    // console.log("current", currentPage)
     var nextPage = currentPage + 1
     currentStart = (currentPage * pagination) - pagination
     currentEnd = currentPage * pagination
