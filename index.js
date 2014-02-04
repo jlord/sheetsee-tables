@@ -29,7 +29,8 @@ function searchTable(opts, searchTerm) {
   }
 }
 module.exports.sortThings = sortThings
-function sortThings(opts, sorter, sorted) {
+function sortThings(opts, sorter, sorted, tableDiv) {
+  if (opts.tableDiv != tableDiv) return
   opts.data.sort(function(a,b){
     if (a[sorter]<b[sorter]) return -1
     if (a[sorter]>b[sorter]) return 1
@@ -38,7 +39,7 @@ function sortThings(opts, sorter, sorted) {
   if (sorted === "descending") opts.data.reverse()
   makeTable(opts)
   var header
-  $(opts.tableDiv + " .tHeader").each(function(i, el){
+  $(tableDiv + " .tHeader").each(function(i, el){
     var contents = resolveDataTitle($(el).text())
     if (contents === sorter) header = el
   })
@@ -50,6 +51,7 @@ function resolveDataTitle(string) {
   var adjusted = string.toLowerCase().replace(/\s/g, '').replace(/\W/g, '')
   return adjusted
 }
+
 module.exports.initiateTableSorter = initiateTableSorter
 function initiateTableSorter(options) {
   $(document).on("click", ".tHeader", sendToSort)
