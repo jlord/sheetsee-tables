@@ -72,13 +72,16 @@ You pass in an object containing:
 - `pagination` how many rows displayed at one time, defaults to all
 - `tableDiv` the <div> placeholder in your HTML
 - `filterDiv` the `<div>` containing your `<input>` filter if using search
+- `templateID` if you are reusing a template or your templateID is different than your `tableDiv` (if you don't include this, it will assume it matches `tableDiv`)
 
 ```javascript
 var tableOptions = {
                     "data": gData,
                     "pagination": 10,
                     "tableDiv": "#fullTable",
-                    "filterDiv": "#fullTableFilter"
+                    "filterDiv": "#fullTableFilter",
+                    "templateID": "fullTable"
+
                     }
 Sheetsee.makeTable(tableOptions)
 ```
