@@ -1,6 +1,7 @@
 # Sheetsee-tables
 
-see: [jlord.github.io/sheetsee.js](jlord.github.io/sheetsee.js)
+see: [jlord.github.io/sheetsee.js](http://jlord.github.io/sheetsee.js)
+demo: [tables](http://jlord.github.io/sheetsee.js/demos/demo-table.html)
 
 With this module you can create tables of your data that are sortable, searchable and paginate-able.
 
