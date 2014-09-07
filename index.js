@@ -72,12 +72,13 @@ function initiateTableSorter(options) {
 
 module.exports.makeTable = makeTable
 function makeTable(opts, filteredList) {
+  opts.templateID = opts.tableDiv + "_template"
   initiateTableSorter(opts)
-  
+
   if (filteredList) var data = filteredList
     else var data = opts.data
   var tableId = opts.tableDiv.slice(1)
-  if (!opts.pagination) table(data, opts.targetDiv)
+  if (!opts.pagination) table(data, {"tableDiv": "#" + opts.targetDiv})
   var allRows = data.length
   var totalPages = Math.ceil(allRows / opts.pagination)
   var currentPage = 1
@@ -86,13 +87,13 @@ function makeTable(opts, filteredList) {
   var currentRows = data.slice(currentStart, currentEnd)
   table(currentRows, opts)
   if (opts.data.length > opts.pagination) writePreNext(opts.tableDiv, currentPage, currentPage, totalPages, data, opts.pagination)
-  
+
 }
 
 module.exports.setPagClicks = setPagClicks
 function setPagClicks(data, tableId, currentPage, pagination, totalPages) {
   $(".pagination-pre-" + tableId).addClass("no-pag")
-    
+
   $(document).on("click", (".pagination-next-" + tableId), function() {
     if ($(this).hasClass("no-pag")) return
 
@@ -103,14 +104,14 @@ function setPagClicks(data, tableId, currentPage, pagination, totalPages) {
 
     if (currentPage >= totalPages) {
       currentRows = data.slice(currentStart, currentEnd)
-      table(currentRows, "#" + tableId)
+      table(currentRows, {"tableDiv": "#" + tableId})
       setPreNext("#" + tableId, currentPage, currentPage, totalPages)
       $(".pagination-next-" + tableId).addClass("no-pag")
       $(".pagination-next-" + tableId)
     }
     else {
       currentRows = data.slice(currentStart, currentEnd)
-      table(currentRows, "#" + tableId)
+      table(currentRows, {"tableDiv": "#" + tableId})
       setPreNext("#" + tableId, currentPage, currentPage, totalPages)
     }
 })
@@ -134,16 +135,16 @@ function setPagClicks(data, tableId, currentPage, pagination, totalPages) {
 
     if (currentPage === 1) {
       currentRows = data.slice(currentStart, currentEnd)
-      table(currentRows, "#" + tableId)
+      table(currentRows, {"tableDiv": "#" + tableId})
       setPreNext("#" + tableId, currentPage, currentPage, totalPages)
       $(".pagination-pre-" + tableId).addClass("no-pag")
     }
     else {
       currentRows = data.slice(currentStart, currentEnd)
-      table(currentRows, "#" + tableId)
+      table(currentRows, {"tableDiv": "#" + tableId})
       setPreNext("#" + tableId, currentPage, currentPage, totalPages)
     }
-    
+
   })
 }
 
@@ -171,11 +172,14 @@ function clearPreNext() {
 
 module.exports.table = table
 function table(data, opts) {
+  var templateID = ""
   if (opts.templateID) {
-    var templateID = opts.templateID
-  } else var templateID = opts.tableDiv.replace("#", "")
-  var tableContents = ich[templateID]({
-    rows: data
-  })
+    templateID = opts.templateID.replace("#", "")
+  }
+  else {
+    templateID = opts.tableDiv.replace("#", "") + "_template"
+  }
+  var template = $(templateID)
+  var tableContents = ich.fullTable_template({rows: data})
   $(opts.tableDiv).html(tableContents)
 }
