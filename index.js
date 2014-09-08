@@ -180,6 +180,6 @@ function table(data, opts) {
     templateID = opts.tableDiv.replace("#", "") + "_template"
   }
   var template = $(templateID)
-  var tableContents = ich.fullTable_template({rows: data})
+  var tableContents = ich[templateID]({rows: data})
   $(opts.tableDiv).html(tableContents)
 }
