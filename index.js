@@ -149,7 +149,7 @@ function setPagClicks(data, tableId, currentPage, pagination, totalPages) {
 }
 
 module.exports.setPreNext = setPreNext
-function  setPreNext(targetDiv, currentPage, currentPage, totalPages, data, pagination) {
+function  setPreNext (targetDiv, currentPage, currentPage1, totalPages, data, pagination) {
   var tableId = targetDiv.slice(1)
   $(targetDiv).append("<div id='Pagination' pageno='" + currentPage + "'" + "class='table-pagination'>Showing page "
     + currentPage + " of " + totalPages + " <a class='pagination-pre-" + tableId + "'>Previous</a>" +
@@ -157,7 +157,7 @@ function  setPreNext(targetDiv, currentPage, currentPage, totalPages, data, pagi
 }
 
 module.exports.writePreNext = writePreNext
-function  writePreNext(targetDiv, currentPage, currentPage, totalPages, data, pagination) {
+function  writePreNext(targetDiv, currentPage, currentPage1, totalPages, data, pagination) {
   var tableId = targetDiv.slice(1)
   $(targetDiv).append("<div id='Pagination' pageno='" + currentPage + "'" + "class='table-pagination'>Showing page "
     + currentPage + " of " + totalPages + " <a class='pagination-pre-" + tableId + "'>Previous</a>" +
