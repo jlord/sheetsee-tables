@@ -29,7 +29,7 @@ function searchTable (opts, searchTerm) {
 }
 module.exports.sortThings = sortThings
 function sortThings (opts, sorter, sorted, tableDiv) {
-  if (opts.tableDiv != tableDiv) return
+  if (opts.tableDiv !== tableDiv) return
   opts.data.sort(function (a, b) {
     if (a[sorter] < b[sorter]) return -1
     if (a[sorter] > b[sorter]) return 1
