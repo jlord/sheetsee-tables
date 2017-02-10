@@ -1,5 +1,5 @@
 var ich = require('icanhaz')
-
+// TODO Finish linting by fixing vars
 module.exports.initiateTableFilter = function (opts) {
   $('.clear').on('click', function () {
     $(this.id + '.noMatches').css('visibility', 'hidden')
