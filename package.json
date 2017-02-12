@@ -4,7 +4,8 @@
   "description": "enables table creating functionality with sheetsee.js",
   "main": "index.js",
   "scripts": {
-    "test": "standard"
+    "lint": "standard",
+    "test": "node test/index.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "icanhaz": "~0.10.3"
   },
   "devDependencies": {
-    "standard": "^8.6.0"
+    "standard": "^8.6.0",
+    "tape": "^4.6.3"
   }
 }
