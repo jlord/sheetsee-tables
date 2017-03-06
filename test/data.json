@@ -1,0 +1,27 @@
+[
+ {
+  "Animal": "Cat",
+  "Name": "Liza",
+  "Rating": "10"
+ },
+ {
+  "Animal": "Dog",
+  "Name": "Boo",
+  "Rating": "10"
+ },
+ {
+  "Animal": "Dog",
+  "Name": "Sam",
+  "Rating": "9"
+ },
+ {
+  "Animal": "Cat",
+  "Name": "Snowy",
+  "Rating": "8"
+ },
+ {
+  "Animal": "Cat",
+  "Name": "Trisana",
+  "Rating": "7"
+ }
+]
