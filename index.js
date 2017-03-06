@@ -1,6 +1,7 @@
 var ich = require('icanhaz')
 // TODO Finish linting by fixing vars
-module.exports.initiateTableFilter = function (opts) {
+
+function initiateTableFilter (opts) {
   $('.clear').on('click', function () {
     $(this.id + '.noMatches').css('visibility', 'hidden')
     $(this.id + opts.filterDiv).val('')
@@ -12,7 +13,6 @@ module.exports.initiateTableFilter = function (opts) {
   })
 }
 
-module.exports.searchTable = searchTable
 function searchTable (opts, searchTerm) {
   var filteredList = []
   opts.data.forEach(function (object) {
@@ -27,7 +27,7 @@ function searchTable (opts, searchTerm) {
     makeTable(opts, filteredList)
   }
 }
-module.exports.sortThings = sortThings
+
 function sortThings (opts, sorter, sorted, tableDiv) {
   if (opts.tableDiv !== tableDiv) return
   opts.data.sort(function (a, b) {
@@ -45,13 +45,11 @@ function sortThings (opts, sorter, sorted, tableDiv) {
   $(header).attr('data-sorted', sorted)
 }
 
-module.exports.resolveDataTitle = resolveDataTitle
 function resolveDataTitle (string) {
   var adjusted = string.toLowerCase().replace(/\s/g, '').replace(/\W/g, '')
   return adjusted
 }
 
-module.exports.initiateTableSorter = initiateTableSorter
 function initiateTableSorter (options) {
   $(document).on('click', '.tHeader', sendToSort)
 
@@ -68,7 +66,6 @@ function initiateTableSorter (options) {
   }
 }
 
-module.exports.makeTable = makeTable
 function makeTable (opts, filteredList) {
   opts.templateID = opts.tableDiv + '_template'
   initiateTableSorter(opts)
@@ -87,7 +84,6 @@ function makeTable (opts, filteredList) {
   if (opts.data.length > opts.pagination) writePreNext(opts.tableDiv, currentPage, currentPage, totalPages, data, opts.pagination)
 }
 
-module.exports.setPagClicks = setPagClicks
 function setPagClicks (data, tableId, currentPage, pagination, totalPages) {
   $('.pagination-pre-' + tableId).addClass('no-pag')
 
@@ -142,7 +138,6 @@ function setPagClicks (data, tableId, currentPage, pagination, totalPages) {
   })
 }
 
-module.exports.setPreNext = setPreNext
 function setPreNext (targetDiv, currentPage, currentPage1, totalPages, data, pagination) {
   var tableId = targetDiv.slice(1)
   $(targetDiv).append("<div id='Pagination' pageno='" + currentPage + "'" + "class='table-pagination'>Showing page "
@@ -150,7 +145,6 @@ function setPreNext (targetDiv, currentPage, currentPage1, totalPages, data, pag
     " <a class='pagination-next-" + tableId + "'>Next</a></p></div>")
 }
 
-module.exports.writePreNext = writePreNext
 function writePreNext (targetDiv, currentPage, currentPage1, totalPages, data, pagination) {
   var tableId = targetDiv.slice(1)
   $(targetDiv).append("<div id='Pagination' pageno='" + currentPage + "'" + "class='table-pagination'>Showing page "
@@ -159,12 +153,10 @@ function writePreNext (targetDiv, currentPage, currentPage1, totalPages, data, p
   setPagClicks(data, tableId, currentPage, pagination, totalPages)
 }
 
-module.exports.clearPreNext = clearPreNext
 function clearPreNext () {
   $('.table-pagination').attr('display', 'none')
 }
 
-module.exports.table = table
 function table (data, opts) {
   var templateID = ''
   if (opts.templateID) {
@@ -176,3 +168,15 @@ function table (data, opts) {
   var tableContents = ich[templateID]({rows: data})
   $(opts.tableDiv).html(tableContents)
 }
+
+module.exports.initiateTableFilter = initiateTableFilter
+module.exports.searchTable = searchTable
+module.exports.sortThings = sortThings
+module.exports.resolveDataTitle = resolveDataTitle
+module.exports.initiateTableSorter = initiateTableSorter
+module.exports.makeTable = makeTable
+module.exports.setPagClicks = setPagClicks
+module.exports.setPreNext = setPreNext
+module.exports.writePreNext = writePreNext
+module.exports.clearPreNext = clearPreNext
+module.exports.table = table
