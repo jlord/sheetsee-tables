@@ -24,7 +24,9 @@
     "icanhaz": "~0.10.3"
   },
   "devDependencies": {
+    "browserify": "^14.1.0",
     "standard": "^8.6.0",
-    "tape": "^4.6.3"
+    "tape": "^4.6.3",
+    "tape-run": "^2.4.1"
   }
 }
