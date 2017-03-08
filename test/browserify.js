@@ -1,8 +1,6 @@
-var run = require('tape-run')
+var fs = require('fs')
 var browserify = require('browserify')
 
-browserify(__dirname + '/index.js')
+browserify(__dirname + '/set.js')
   .bundle()
-  .pipe(run())
-  .on('results', console.log)
-  .pipe(process.stdout)
+  .pipe(fs.createWriteStream(__dirname + '/sheetsee.js'))
