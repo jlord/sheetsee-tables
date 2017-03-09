@@ -40,11 +40,12 @@ function sortThings (opts, sorter, sorted, tableDiv) {
   if (sorted === 'descending') opts.data.reverse()
   makeTable(opts)
   var header
-  $(tableDiv + ' .tHeader').each(function (i, el) {
-    var contents = resolveDataTitle($(el).text())
+  var tableHeaders = document.querySelectorAll(tableDiv + ' .tHeader')
+  Array.prototype.forEach.call(tableHeaders, function (el) {
+    var contents = resolveDataTitle(el.innerText)
     if (contents === sorter) header = el
   })
-  $(header).attr('data-sorted', sorted)
+  header.setAttribute('data-sorted', sorted)
 }
 
 function resolveDataTitle (string) {
