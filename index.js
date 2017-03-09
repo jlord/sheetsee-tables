@@ -2,14 +2,17 @@ var ich = require('icanhaz')
 // TODO Finish linting by fixing vars
 
 function initiateTableFilter (opts) {
-  $('.clear').on('click', function () {
-    $(this.id + '.noMatches').css('visibility', 'hidden')
-    $(this.id + opts.filterDiv).val('')
+  // TODO what if there are multiple tables and clears
+  document.querySelector('.clear').addEventListener('click', function () {
+    // TODO simplify this/only check once to see if .clears and .matches exist
+    if (document.querySelector(this.id + '.matches')) {
+      document.querySelector(this.id + '.matches').setAttribute('visibility', 'hidden')
+    }
+    document.querySelector(this.id + opts.filterDiv).value = ''
     makeTable(opts)
   })
-  $(opts.filterDiv).keyup(function (e) {
-    var text = $(e.target).val()
-    searchTable(opts, text)
+  document.querySelector(opts.filterDiv).addEventListener('keyup', function (e) {
+    searchTable(opts, e.target.value)
   })
 }
 
