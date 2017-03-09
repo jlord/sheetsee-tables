@@ -22,13 +22,12 @@ function searchTable (opts, searchTerm) {
     var stringObject = JSON.stringify(object).toLowerCase()
     if (stringObject.match(searchTerm.toLowerCase())) filteredList.push(object)
   })
-  if (filteredList.length === 0) {
-    $('.noMatches').css('visibility', 'inherit')
-    makeTable(opts, filteredList)
-  } else {
-    $('.noMatches').css('visibility', 'hidden')
-    makeTable(opts, filteredList)
+
+  if (document.querySelector('.noMatches')) {
+    if (filteredList.length === 0) document.querySelector('.noMatches').setAttribute('visibility', 'inherit')
+    else document.querySelector('.noMatches').setAttribute('visibility', 'hidden')
   }
+  makeTable(opts, filteredList)
 }
 
 function sortThings (opts, sorter, sorted, tableDiv) {
