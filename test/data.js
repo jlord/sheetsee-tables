@@ -7,17 +7,17 @@ var data = [
  {
   "Animal": "Dog",
   "Name": "Boo",
-  "Rating": "10"
+  "Rating": "9"
  },
  {
   "Animal": "Dog",
   "Name": "Sam",
-  "Rating": "9"
+  "Rating": "10"
  },
  {
   "Animal": "Cat",
   "Name": "Snowy",
-  "Rating": "8"
+  "Rating": "4"
  },
  {
   "Animal": "Cat",
