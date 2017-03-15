@@ -11,7 +11,7 @@ function makeTable (data) {
     tableOptions.templateID = tableOptions.tableDiv.replace('#', '') + '_template'
   }
 
-  actuallyMakeTable()
+  prepTable()
   initiateTableSorter()
 }
 
@@ -48,105 +48,16 @@ function sortData (event) {
     return 0
   })
   if (tableOptions.sortMeta.sorted === 'descending') tableOptions.data.reverse()
-  actuallyMakeTable()
+  prepTable()
 }
 
-// Called each time table is redrawn
-function actuallyMakeTable (filteredList) {
+// Prep the data and pagination for the table
+function prepTable (filteredList) {
   var data = filteredList || tableOptions.data
 
   // If they don't specifiy pagination, draw table with everything
-  if (!tableOptions.pagination) {
-    return updateTable(data, {'tableDiv': '#' + tableOptions.targetDiv})
-  }
-
-  buildPagination(data, tableOptions.pagination)
-  updateTable(tableOptions.paginationMeta.currentRows)
-
-  if (tableOptions.data.length > tableOptions.pagination) {
-    updatePreNext(data)
-    setPagClicks(data)
-  }
-}
-
-function updatePreNext (data) {
-  var tableId = tableOptions.tableDiv.slice(1)
-  var prenext = document.createElement('div')
-  prenext.setAttribute('id', 'Pagination')
-  prenext.setAttribute('pageno', tableOptions.paginationMeta.currentPage)
-  prenext.classList.add('table-pagination')
-  prenext.innerHTML = 'Showing page ' + tableOptions.paginationMeta.currentPage + ' of ' + tableOptions.paginationMeta.totalPages + " <a class='pagination-pre-" + tableId + "'>Previous</a>" + " <a class='pagination-next-" + tableId + "'>Next</a></div>"
-  document.getElementById(tableId).append(prenext)
-}
-
-function setPagClicks (data) {
-  // TODO this should just happen when a table is getting refreshed and at first page
-  var tableId = tableOptions.tableDiv.slice(1)
-  document.querySelector('.pagination-pre-' + tableId).classList.add('no-pag')
-
-  // Add listeners
-  nextListener(data)
-  preListener(data)
-}
-
-function updatePagCounts (direction) {
-  var pag = tableOptions.paginationMeta
-  pag.currentPage = pag.currentPage + direction
-  pag.nextPage = pag.currentPage + 1
-  pag.currentStart = (pag.currentPage * tableOptions.pagination) - tableOptions.pagination
-  pag.currentEnd = pag.currentPage * tableOptions.pagination
-}
-
-function updatePages (data) {
-  var tableId = tableOptions.tableDiv.slice(1)
-  var pag = tableOptions.paginationMeta
-
-  pag.currentRows = data.slice(pag.currentStart, pag.currentEnd)
-  updateTable(pag.currentRows)
-  updatePreNext(data)
-
-  // On the last page
-  if (pag.currentPage === pag.totalPages) {
-    document.querySelector('.pagination-next-' + tableId).classList.add('no-pag')
-    document.querySelector('.pagination-pre-' + tableId).classList.remove('no-pag')
-  }
-  // On the first page
-  if (pag.currentPage === 1) {
-    document.querySelector('.pagination-pre-' + tableId).classList.add('no-pag')
-    document.querySelector('.pagination-next-' + tableId).classList.remove('no-pag')
-  }
-}
-
-function nextListener (data) {
-  var tableId = tableOptions.tableDiv.slice(1)
-  document.body.addEventListener('click', function (event) {
-    if (event.target.classList.contains('pagination-next-' + tableId)) {
-      if (event.target.classList.contains('no-pag')) return
-      updatePagCounts(Number(1))
-      updatePages(data)
-    }
-  })
-}
-
-function preListener (data) {
-  var tableId = tableOptions.tableDiv.slice(1)
-  document.body.addEventListener('click', function (event) {
-    if (event.target.classList.contains('pagination-pre-' + tableId)) {
-      if (event.target.classList.contains('no-pag')) return
-      updatePagCounts(Number(-1))
-      updatePages(data)
-    }
-  })
-}
-
-function buildPagination (data, pagination) {
-  tableOptions.paginationMeta.allRows = data.length
-  tableOptions.paginationMeta.totalPages = Math.ceil(tableOptions.paginationMeta.allRows / pagination)
-  tableOptions.paginationMeta.currentPage = 1
-  tableOptions.paginationMeta.currentStart = (tableOptions.paginationMeta.currentPage * pagination) - pagination
-  tableOptions.paginationMeta.currentEnd = tableOptions.paginationMeta.currentPage * pagination
-  tableOptions.paginationMeta.currentRows = data.slice(tableOptions.paginationMeta.currentStart, tableOptions.paginationMeta.currentEnd)
-  return
+  // if (!tableOptions.pagination) return updateTable(data)
+  updateTable(data)
 }
 
 function updateTable (data) {
@@ -156,4 +67,4 @@ function updateTable (data) {
 }
 
 module.exports.makeTable = makeTable
-module.exports.initiateTableFilter = initiateTableFilter
+// module.exports.initiateTableFilter = initiateTableFilter
