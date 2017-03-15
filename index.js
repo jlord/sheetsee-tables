@@ -55,8 +55,7 @@ function sortData (event) {
 function actuallyMakeTable (filteredList) {
   var data = filteredList || tableOptions.data
 
-  // If they don't specifiy pagination,
-  // draw one table with everything
+  // If they don't specifiy pagination, draw table with everything
   if (!tableOptions.pagination) {
     return updateTable(data, {'tableDiv': '#' + tableOptions.targetDiv})
   }
@@ -81,6 +80,7 @@ function updatePreNext (data) {
 }
 
 function setPagClicks (data) {
+  // TODO this should just happen when a table is getting refreshed and at first page
   var tableId = tableOptions.tableDiv.slice(1)
   document.querySelector('.pagination-pre-' + tableId).classList.add('no-pag')
 
@@ -156,4 +156,4 @@ function updateTable (data) {
 }
 
 module.exports.makeTable = makeTable
-// module.exports.initiateTableFilter = initiateTableFilter
+module.exports.initiateTableFilter = initiateTableFilter
