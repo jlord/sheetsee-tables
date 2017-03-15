@@ -1,14 +1,14 @@
 var Mustache = require('mustache')
-var tableOptions = {}
+var tblOpts = {}
 
 // Only called the very first time
 function makeTable (data) {
-  tableOptions = data
-  tableOptions.sortMeta = {}
-  tableOptions.paginationMeta = {}
+  tblOpts = data
+  tblOpts.sortMeta = {}
+  tblOpts.paginationMeta = {}
 
-  if (!tableOptions.templateID) {
-    tableOptions.templateID = tableOptions.tableDiv.replace('#', '') + '_template'
+  if (!tblOpts.templateID) {
+    tblOpts.templateID = tblOpts.tableDiv.replace('#', '') + '_template'
   }
 
   prepTable()
@@ -26,20 +26,20 @@ function initiateTableSorter () {
 
 // Prepare to be sorted
 function perpareSort (event) {
-  if (!tableOptions.sortMeta.sorted || tableOptions.sortMeta.sorted === 'descending') {
-    tableOptions.sortMeta.sorted = 'ascending'
-  } else if (tableOptions.sortMeta.sorted === 'ascending') tableOptions.sortMeta.sorted = 'descending'
+  if (!tblOpts.sortMeta.sorted || tblOpts.sortMeta.sorted === 'descending') {
+    tblOpts.sortMeta.sorted = 'ascending'
+  } else if (tblOpts.sortMeta.sorted === 'ascending') tblOpts.sortMeta.sorted = 'descending'
 
-  tableOptions.sortMeta.sortBy = event.target.innerHTML.replace(/\s/g, '').replace(/\W/g, '')
-  tableOptions.tableDiv = '#' + event.target.closest('div').getAttribute('id')
+  tblOpts.sortMeta.sortBy = event.target.innerHTML.replace(/\s/g, '').replace(/\W/g, '')
+  tblOpts.tableDiv = '#' + event.target.closest('div').getAttribute('id')
   sortData(event)
 }
 
 // Sort the data
 function sortData (event) {
-  tableOptions.data.sort(function (a, b) {
-    var aa = a[tableOptions.sortMeta.sortBy]
-    var bb = b[tableOptions.sortMeta.sortBy]
+  tblOpts.data.sort(function (a, b) {
+    var aa = a[tblOpts.sortMeta.sortBy]
+    var bb = b[tblOpts.sortMeta.sortBy]
     aa = aa.match(/^[\d\.,]$/) ? Number(aa) : aa
     bb = bb.match(/^[\d\.,]$/) ? Number(bb) : bb
 
@@ -47,27 +47,28 @@ function sortData (event) {
     if (aa > bb) return 1
     return 0
   })
-  if (tableOptions.sortMeta.sorted === 'descending') tableOptions.data.reverse()
+  if (tblOpts.sortMeta.sorted === 'descending') tblOpts.data.reverse()
   prepTable()
 }
 
 // Prep the data and pagination for the table
 function prepTable (filteredList) {
-  var data = filteredList || tableOptions.data
+  var data = filteredList || tblOpts.data
 
   // If they don't specifiy pagination, draw table with everything
-  if (!tableOptions.pagination) return updateTable(data)
+  if (!tblOpts.pagination) return updateTable(data)
 
   // Create Pagination Metadata
   // Build the table with paginated data
   // Append pagination DOM elements
+
+  updateTable(data)
 }
 
 function updateTable (data) {
-  var rawTemplate = document.getElementById(tableOptions.templateID).innerHTML
+  var rawTemplate = document.getElementById(tblOpts.templateID).innerHTML
   var content = Mustache.render(rawTemplate, {rows: data})
-  document.getElementById(tableOptions.tableDiv.replace('#', '')).innerHTML = content
+  document.getElementById(tblOpts.tableDiv.replace('#', '')).innerHTML = content
 }
-
 module.exports.makeTable = makeTable
 // module.exports.initiateTableFilter = initiateTableFilter
