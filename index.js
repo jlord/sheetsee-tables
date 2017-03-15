@@ -56,8 +56,11 @@ function prepTable (filteredList) {
   var data = filteredList || tableOptions.data
 
   // If they don't specifiy pagination, draw table with everything
-  // if (!tableOptions.pagination) return updateTable(data)
-  updateTable(data)
+  if (!tableOptions.pagination) return updateTable(data)
+
+  // Create Pagination Metadata
+  // Build the table with paginated data
+  // Append pagination DOM elements
 }
 
 function updateTable (data) {
