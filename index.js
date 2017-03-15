@@ -2,7 +2,7 @@ var Mustache = require('mustache')
 var tableOptions = {}
 
 // Only called the very first time
-function makeTable (data, filteredList) {
+function makeTable (data) {
   tableOptions = data
   tableOptions.sortMeta = {}
   tableOptions.paginationMeta = {}
@@ -10,7 +10,8 @@ function makeTable (data, filteredList) {
   if (!tableOptions.templateID) {
     tableOptions.templateID = tableOptions.tableDiv.replace('#', '') + '_template'
   }
-  actuallyMakeTable(filteredList)
+
+  actuallyMakeTable()
   initiateTableSorter()
 }
 
