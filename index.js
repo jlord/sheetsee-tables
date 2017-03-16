@@ -56,7 +56,6 @@ function sortData () {
     return 0
   })
   if (tblOpts.sortMeta.sorted === 'descending') sortGroup.reverse()
-  console.log("SORT!")
   // This table update doesn't change pagination; reset direction
   if (tblOpts.pgnMta.dir) tblOpts.pgnMta.dir = Number(0)
   // If the table has been filtered, just sort those
@@ -77,7 +76,6 @@ function initiateTableFilter (options) {
 
   // listen for clicks on clear button
   document.querySelector('.clear').addEventListener('click', function () {
-    console.log("CLEAR!")
     filterInput.value = ''
     // This resets the table to initial direction
     if (tblOpts.pgnMta.dir) tblOpts.pgnMta.dir = Number(0)
@@ -118,7 +116,6 @@ function prepTable (filteredList) {
   // Create Pagination Metadata
   // buildPaginationMeta(data, tblOpts.pagination)
   buildPaginationMeta(data)
-  console.log(tblOpts.pgnMta)
   // Build the table with paginated data
   updateTable(tblOpts.pgnMta.crntRows)
   // Append pagination DOM elements
@@ -136,7 +133,6 @@ function updateTable (data) {
 // PAGINATION
 
 function buildPaginationMeta (data) {
-  console.log('buildPagination data', data)
   var dir = tblOpts.pgnMta.dir || 0
   var current = tblOpts.pgnMta.crntPage || 1
   tblOpts.pgnMta.allRows = data
@@ -158,7 +154,7 @@ function addPaginationDOM (nopages) {
   el.classList.add('table-pagination')
   if (nopages) {
     el.innerHTML = 'No results</div>'
-  } else if (tblOpts.pgnMta.crntPage === tblOpts.pgnMta.totalPages) {
+  } else if (tblOpts.pgnMta.allRowsLen <= tblOpts.pagination) {
     el.innerHTML = 'Page 1 of 1</div>'
   }else {
     el.innerHTML = 'Showing page ' + tblOpts.pgnMta.crntPage + ' of ' + tblOpts.pgnMta.totalPages + " <a class='pagination-pre-" + tblId + "'>Previous</a>" + " <a class='pagination-next-" + tblId + "'>Next</a></div>"
@@ -166,11 +162,10 @@ function addPaginationDOM (nopages) {
   document.getElementById(tblId).append(el)
   // Don't show pagination in these cases TODO clean up
   if (nopages) return
-  if (tblOpts.pgnMta.crntPage === tblOpts.pgnMta.totalPages) return
+  if (tblOpts.pgnMta.allRowsLen <= tblOpts.pagination) return
 
   // On the last page
   if (tblOpts.pgnMta.crntPage >= tblOpts.pgnMta.totalPages) {
-    console.log('greater than or equal to -- last page')
     document.querySelector('.pagination-next-' + tblId).classList.add('no-pag')
     document.querySelector('.pagination-pre-' + tblId).classList.remove('no-pag')
   }
@@ -181,7 +176,6 @@ function addPaginationDOM (nopages) {
   }
   // Listen for next clicks
   document.querySelector('.pagination-next-' + tblId).addEventListener('click', function (e) {
-    console.log("CLICKED NEXT")
     if (e.target.classList.contains('no-pag')) return
     tblOpts.pgnMta.dir = Number(1)
     // if there is text in the search and you are paginating
@@ -192,7 +186,6 @@ function addPaginationDOM (nopages) {
   })
   // Listen for previous clicks
   document.querySelector('.pagination-pre-' + tblId).addEventListener('click', function (e) {
-    console.log("CLICKED PRE")
     if (e.target.classList.contains('no-pag')) return
     tblOpts.pgnMta.dir = Number(-1)
     // if there is text in the search and you are paginating
