@@ -156,7 +156,7 @@ function addPaginationDOM (nopages) {
     el.innerHTML = 'No results</div>'
   } else if (tblOpts.pgnMta.allRowsLen <= tblOpts.pagination) {
     el.innerHTML = 'Page 1 of 1</div>'
-  }else {
+  } else {
     el.innerHTML = 'Showing page ' + tblOpts.pgnMta.crntPage + ' of ' + tblOpts.pgnMta.totalPages + " <a class='pagination-pre-" + tblId + "'>Previous</a>" + " <a class='pagination-next-" + tblId + "'>Next</a></div>"
   }
   document.getElementById(tblId).append(el)
