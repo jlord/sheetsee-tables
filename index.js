@@ -109,6 +109,20 @@ function addPaginationDOM () {
     document.querySelector('.pagination-pre-' + tblId).classList.add('no-pag')
     document.querySelector('.pagination-next-' + tblId).classList.remove('no-pag')
   }
+  // Listen for next clicks
+  document.querySelector('.pagination-next-' + tblId).addEventListener('click', function (e) {
+    console.log("CLICKED NEXT")
+    if (e.target.classList.contains('no-pag')) return
+    tblOpts.pgnMta.dir = Number(1)
+    // build table
+  })
+  // Listen for previous clicks
+  document.querySelector('.pagination-pre-' + tblId).addEventListener('click', function (e) {
+    console.log("CLICKED PRE")
+    if (e.target.classList.contains('no-pag')) return
+    tblOpts.pgnMta.dir = Number(-1)
+    // build table
+  })
 }
 
 module.exports.makeTable = makeTable
