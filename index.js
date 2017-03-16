@@ -65,6 +65,7 @@ function sortData () {
 
 // FITERING
 
+// Set up listeners for clear and input
 function initiateTableFilter (options) {
   // If things are missing, return
   if (document.querySelector('.clear') === null) return
@@ -88,10 +89,7 @@ function initiateTableFilter (options) {
   })
 }
 
-// function getFilterValue () {
-//   return document.getElementById(tblOpts.filterDiv.replace('#', '')).value
-// }
-
+// Search the table with input
 function searchTable (searchTerm) {
   var filteredList = []
   tblOpts.data.forEach(function (object) {
@@ -114,7 +112,6 @@ function prepTable (filteredList) {
   if (!tblOpts.pagination) return updateTable(data)
 
   // Create Pagination Metadata
-  // buildPaginationMeta(data, tblOpts.pagination)
   buildPaginationMeta(data)
   // Build the table with paginated data
   updateTable(tblOpts.pgnMta.crntRows)
@@ -132,6 +129,7 @@ function updateTable (data) {
 
 // PAGINATION
 
+// Create the metadata used in pagination
 function buildPaginationMeta (data) {
   var dir = tblOpts.pgnMta.dir || 0
   var current = tblOpts.pgnMta.crntPage || 1
@@ -146,6 +144,7 @@ function buildPaginationMeta (data) {
   return
 }
 
+// Add pagination elements and listeners to the DOM
 function addPaginationDOM (nopages) {
   var tblId = tblOpts.tableDiv.slice(1)
   var el = document.createElement('div')
@@ -157,7 +156,9 @@ function addPaginationDOM (nopages) {
   } else if (tblOpts.pgnMta.allRowsLen <= tblOpts.pagination) {
     el.innerHTML = 'Page 1 of 1</div>'
   } else {
-    el.innerHTML = 'Showing page ' + tblOpts.pgnMta.crntPage + ' of ' + tblOpts.pgnMta.totalPages + " <a class='pagination-pre-" + tblId + "'>Previous</a>" + " <a class='pagination-next-" + tblId + "'>Next</a></div>"
+    el.innerHTML = 'Showing page ' + tblOpts.pgnMta.crntPage + ' of ' +
+    tblOpts.pgnMta.totalPages + " <a class='pagination-pre-" + tblId +
+    "'>Previous</a>" + " <a class='pagination-next-" + tblId + "'>Next</a></div>"
   }
   document.getElementById(tblId).append(el)
   // Don't show pagination in these cases TODO clean up
@@ -179,8 +180,7 @@ function addPaginationDOM (nopages) {
     if (e.target.classList.contains('no-pag')) return
     tblOpts.pgnMta.dir = Number(1)
     // if there is text in the search and you are paginating
-    // through filtered data, build table with what is in
-    // paginationmeta data
+    // through filtered data, build table with what is in paginationmeta data
     if (tblOpts.filtering) prepTable(tblOpts.pgnMta.allRows)
     else prepTable()
   })
@@ -189,8 +189,7 @@ function addPaginationDOM (nopages) {
     if (e.target.classList.contains('no-pag')) return
     tblOpts.pgnMta.dir = Number(-1)
     // if there is text in the search and you are paginating
-    // through filtered data, build table with what is in
-    // paginationmeta data
+    // through filtered data, build table with what is in paginationmeta data
     if (tblOpts.filtering) prepTable(tblOpts.pgnMta.allRows)
     else prepTable()
   })
