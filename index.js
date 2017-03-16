@@ -50,6 +50,9 @@ function sortData (event) {
     return 0
   })
   if (tblOpts.sortMeta.sorted === 'descending') tblOpts.data.reverse()
+  console.log("SORT!")
+  // This table update doesn't change pagination; reset direction
+  if (tblOpts.pgnMta.dir) tblOpts.pgnMta.dir = Number(0)
   prepTable()
 }
 
@@ -79,10 +82,12 @@ function updateTable (data) {
 // PAGINATION
 
 function buildPaginationMeta (data) {
+  console.log('buildPagination data', data)
   var dir = tblOpts.pgnMta.dir || 0
+  var current = tblOpts.pgnMta.crntPage || 1
   tblOpts.pgnMta.allRows = data.length
   tblOpts.pgnMta.totalPages = Math.ceil(tblOpts.pgnMta.allRows / tblOpts.pagination)
-  tblOpts.pgnMta.crntPage = 1 + dir
+  tblOpts.pgnMta.crntPage = current + dir
   tblOpts.pgnMta.nextPage = tblOpts.pgnMta.crntPage - 1
   tblOpts.pgnMta.crntStart = (tblOpts.pgnMta.crntPage * tblOpts.pagination) - tblOpts.pagination
   tblOpts.pgnMta.crntEnd = tblOpts.pgnMta.crntPage * tblOpts.pagination
@@ -100,7 +105,7 @@ function addPaginationDOM () {
   document.getElementById(tblId).append(el)
 
   // On the last page
-  if (tblOpts.pgnMta.crntPage === tblOpts.pgnMta.totalPages) {
+  if (tblOpts.pgnMta.crntPage >= tblOpts.pgnMta.totalPages) {
     document.querySelector('.pagination-next-' + tblId).classList.add('no-pag')
     document.querySelector('.pagination-pre-' + tblId).classList.remove('no-pag')
   }
@@ -114,14 +119,18 @@ function addPaginationDOM () {
     console.log("CLICKED NEXT")
     if (e.target.classList.contains('no-pag')) return
     tblOpts.pgnMta.dir = Number(1)
+    console.log(tblOpts.pgnMta.dir)
     // build table
+    prepTable()
   })
   // Listen for previous clicks
   document.querySelector('.pagination-pre-' + tblId).addEventListener('click', function (e) {
     console.log("CLICKED PRE")
-    if (e.target.classList.contains('no-pag')) return
     tblOpts.pgnMta.dir = Number(-1)
+    console.log(tblOpts.pgnMta.dir)
+    if (e.target.classList.contains('no-pag')) return
     // build table
+    prepTable()
   })
 }
 
