@@ -5,11 +5,13 @@ var tblOpts = {}
 function makeTable (data) {
   tblOpts = data
   tblOpts.sortMeta = {}
-  tblOpts.paginationMeta = {}
+  tblOpts.pgnMta = {}
 
   if (!tblOpts.templateID) {
     tblOpts.templateID = tblOpts.tableDiv.replace('#', '') + '_template'
   }
+
+  buildPaginationMeta(data.data, data.pagination)
 
   prepTable()
   initiateTableSorter()
@@ -59,10 +61,13 @@ function prepTable (filteredList) {
   if (!tblOpts.pagination) return updateTable(data)
 
   // Create Pagination Metadata
+  // buildPaginationMeta(data, tblOpts.pagination)
+  buildPaginationMeta(data)
+  console.log(tblOpts.pgnMta)
   // Build the table with paginated data
+  updateTable(tblOpts.pgnMta.crntRows)
   // Append pagination DOM elements
-
-  updateTable(data)
+  addPaginationDOM()
 }
 
 function updateTable (data) {
@@ -70,5 +75,41 @@ function updateTable (data) {
   var content = Mustache.render(rawTemplate, {rows: data})
   document.getElementById(tblOpts.tableDiv.replace('#', '')).innerHTML = content
 }
+
+// PAGINATION
+
+function buildPaginationMeta (data) {
+  var dir = tblOpts.pgnMta.dir || 0
+  tblOpts.pgnMta.allRows = data.length
+  tblOpts.pgnMta.totalPages = Math.ceil(tblOpts.pgnMta.allRows / tblOpts.pagination)
+  tblOpts.pgnMta.crntPage = 1 + dir
+  tblOpts.pgnMta.nextPage = tblOpts.pgnMta.crntPage - 1
+  tblOpts.pgnMta.crntStart = (tblOpts.pgnMta.crntPage * tblOpts.pagination) - tblOpts.pagination
+  tblOpts.pgnMta.crntEnd = tblOpts.pgnMta.crntPage * tblOpts.pagination
+  tblOpts.pgnMta.crntRows = data.slice(tblOpts.pgnMta.crntStart, tblOpts.pgnMta.crntEnd)
+  return
+}
+
+function addPaginationDOM () {
+  var tblId = tblOpts.tableDiv.slice(1)
+  var el = document.createElement('div')
+  el.setAttribute('id', 'Pagination')
+  el.setAttribute('pageno', tblOpts.pgnMta.crntPage)
+  el.classList.add('table-pagination')
+  el.innerHTML = 'Showing page ' + tblOpts.pgnMta.crntPage + ' of ' + tblOpts.pgnMta.totalPages + " <a class='pagination-pre-" + tblId + "'>Previous</a>" + " <a class='pagination-next-" + tblId + "'>Next</a></div>"
+  document.getElementById(tblId).append(el)
+
+  // On the last page
+  if (tblOpts.pgnMta.crntPage === tblOpts.pgnMta.totalPages) {
+    document.querySelector('.pagination-next-' + tblId).classList.add('no-pag')
+    document.querySelector('.pagination-pre-' + tblId).classList.remove('no-pag')
+  }
+  // On the first page
+  if (tblOpts.pgnMta.crntPage === 1) {
+    document.querySelector('.pagination-pre-' + tblId).classList.add('no-pag')
+    document.querySelector('.pagination-next-' + tblId).classList.remove('no-pag')
+  }
+}
+
 module.exports.makeTable = makeTable
 // module.exports.initiateTableFilter = initiateTableFilter
