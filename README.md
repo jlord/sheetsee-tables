@@ -34,16 +34,16 @@ You'll want to set your table options and pass them into `Sheetsee.makeTable()`.
 
 ## Methods
 
-Functions for you to use! There are just two :tada:
+Functions for you to use! There are just two, woo!
 
 ### `Sheetsee.makeTable(tableOptions)`
 
 You pass in an object containing:
 
-- `data` _array_ your data from Tabletop.js
+- `data` _array_ your data from Tabletop.js **required**
 - `pagination` _number_ how many rows displayed at one time, defaults to all
-- `tableDiv` _string_ the `<div>` `id` placeholder in your HTML, includes the hash `#`
-- `filterDiv` _string_ the `<div>` `id` containing your `<input>` filter if using search, includes the hash `#`
+- `tableDiv` _string_ the `<div>` `id` placeholder in your HTML, includes the hash `#` **required**
+- `filterDiv` _string_ the `<div>` `id` containing your `<input>` filter if using search, includes the hash `#` **required if using filter**
 - `templateID` _string_ the `id` of your `<script>` tag with the template, defaults to assume it's the same as `tableDiv` + `_template`.
 
 ```javascript
@@ -52,7 +52,7 @@ var tableOptions = {
   "pagination": 10,
   "tableDiv": "#fullTable",
   "filterDiv": "#fullTableFilter",
-  "templateID": "fullTable"
+  "templateID": "fullTable_template"
 }
 Sheetsee.makeTable(tableOptions)
 ```
@@ -126,7 +126,7 @@ _JavaScript_
       "pagination": 10,
       "tableDiv": "#siteTable",
       "filterDiv": "#siteTableFilter",
-      "templateID": "tableTemplate"
+      "templateID": "siteTable_template"
     }
     Sheetsee.makeTable(tableOptions)
     Sheetsee.initiateTableFilter(tableOptions)
