@@ -46,10 +46,10 @@ function sortData () {
   else sortGroup = tblOpts.data
 
   sortGroup.sort(function (a, b) {
-    aa = aa.match(/^[\d\.,]$/) ? Number(aa) : aa
-    bb = bb.match(/^[\d\.,]$/) ? Number(bb) : bb
     var aa = a[tblOpts.sortMeta.sortBy].toLowerCase()
     var bb = b[tblOpts.sortMeta.sortBy].toLowerCase()
+    aa = aa.match(/^[\d,]$/) ? Number(aa) : aa
+    bb = bb.match(/^[\d,]$/) ? Number(bb) : bb
 
     if (aa < bb) return -1
     if (aa > bb) return 1
