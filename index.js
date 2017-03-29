@@ -33,7 +33,7 @@ function perpareSort (event) {
   if (!tblOpts.sortMeta.sorted || tblOpts.sortMeta.sorted === 'descending') {
     tblOpts.sortMeta.sorted = 'ascending'
   } else if (tblOpts.sortMeta.sorted === 'ascending') tblOpts.sortMeta.sorted = 'descending'
-
+  // TODO maybe make all keys in data lowercase...
   tblOpts.sortMeta.sortBy = event.target.innerHTML.replace(/\s/g, '').replace(/\W/g, '')
   tblOpts.tableDiv = '#' + event.target.closest('div').getAttribute('id')
   sortData()
