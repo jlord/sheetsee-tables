@@ -1,6 +1,6 @@
 {
   "name": "sheetsee-tables",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "enables table creating functionality with sheetsee.js",
   "main": "index.js",
   "scripts": {
