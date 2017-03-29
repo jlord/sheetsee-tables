@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>Sheetsee Table Test</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
+    <script type='text/javascript' src='./sheetsee.js'></script>
+    <script type='text/javascript' src='./data.js'></script>
+  </head>
+  <style>
+    body {font-family: 'Source Sans Pro', 'Helvetica Nueue', sans-serif; padding: 40px 100px;}
+    .tHeader::after {content: " \2193 \2191 "; font-size: 10px; padding-left: 3px; cursor: pointer; text-align: left;}
+    #Pagination {border-top: 4px solid #CCF4FF; margin: 10px 0px; padding-top: 10px; display: inline-block;}
+    #Pagination a {cursor: pointer;}
+    .no-pag {color: #acacac; border: none;}
+    .no-pag:hover {color: #acacac;}
+    input {border: none; border-bottom: 1px solid #333; margin: 10px 0px; width: 200px; padding-bottom: 6px;}
+  </style>
+
+  <body>
+    <div class="container">
+      <h1>All Pennies</h1>
+      <input id="fullTableFilter" type="text" placeholder="filter by.."></input>
+      <a href="#" class="clear">Clear</a>
+      <div id="fullTable"></div>
+  </div>
+
+  <script id="fullTable_template" type="text/html">
+    <table>
+      <tr><th class="tHeader">Animal</th><th class="tHeader">Name</th><th class="tHeader">Rating</th></tr>
+        {{#rows}}
+          <tr><td>{{Animal}}</td><td>{{Name}}</td><td>{{Rating}}</td></tr>
+        {{/rows}}
+    </table>
+  </script>
+
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+      showInfo()
+    })
+
+    function showInfo() {
+      var tableOptions = {
+        "data": data,
+        "pagination": 2,
+        "tableDiv": "#fullTable",
+        "filterDiv": "#fullTableFilter"
+      }
+      Sheetsee.makeTable(tableOptions)
+      Sheetsee.initiateTableFilter(tableOptions)
+    }
+  </script>
+  </body>
+</html>
