@@ -2,7 +2,7 @@
 
 # sheetsee-tables
 
-Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
+Sheetsee.js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
 
@@ -40,7 +40,7 @@ Functions for you to use! There are just two, woo!
 
 You pass in an object containing:
 
-- `data` _array_ your data from Tabletop.js **required**
+- `data` _array_ your data from Papa Parse **required**
 - `pagination` _number_ how many rows displayed at one time, defaults to all
 - `tableDiv` _string_ the `<div>` `id` placeholder in your HTML, includes the hash `#` **required**
 - `filterDiv` _string_ the `<div>` `id` containing your `<input>` filter if using search, includes the hash `#` **required if using filter**
@@ -134,5 +134,5 @@ _JavaScript_
 </script>
 ```
 
-_[View Demo](http://jlord.us/sheetsee.js/demos/demo-table.html)_
+_[See Demos](https://github.com/jlord/sheetsee-tables/tree/master/demos)_
 _[Visit Site](http://jlord.us/sheetsee.js)_
