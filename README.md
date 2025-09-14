@@ -134,5 +134,13 @@ _JavaScript_
 </script>
 ```
 
+## Quick Start
+
+**New to Sheetsee Tables?** Check out our [Step-by-Step Manual](STEP_BY_STEP_MANUAL.md) for a complete beginner's guide!
+
+**Want to see it in action?** Open [working-demo.html](working-demo.html) in your browser for a working example.
+
+## Demo Links
+
 _[View Demo](http://jlord.us/sheetsee.js/demos/demo-table.html)_
 _[Visit Site](http://jlord.us/sheetsee.js)_

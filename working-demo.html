@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Sheetsee Tables - Working Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/mustache@latest"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            padding: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .demo-section {
+            margin: 40px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        .tHeader {
+            background-color: #007acc;
+            color: white;
+            cursor: pointer;
+            padding: 12px;
+            border: 1px solid #005a9e;
+            font-weight: bold;
+        }
+        .tHeader:hover {
+            background-color: #005a9e;
+        }
+        .tHeader::after {
+            content: " ↕";
+            font-size: 14px;
+            margin-left: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #e8f4f8;
+        }
+        #Pagination {
+            border-top: 3px solid #007acc;
+            margin: 20px 0;
+            padding: 15px 0;
+            text-align: center;
+            background-color: #f0f8ff;
+            border-radius: 5px;
+        }
+        #Pagination a {
+            margin: 0 10px;
+            padding: 8px 16px;
+            background-color: #007acc;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        #Pagination a:hover {
+            background-color: #005a9e;
+        }
+        .no-pag {
+            background-color: #ccc !important;
+            cursor: not-allowed;
+        }
+        .no-pag:hover {
+            background-color: #ccc !important;
+        }
+        input {
+            border: 2px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            width: 250px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input:focus {
+            border-color: #007acc;
+            outline: none;
+        }
+        .clear {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .clear:hover {
+            background-color: #c82333;
+        }
+        .instructions {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #007acc;
+        }
+        .code-block {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎉 Sheetsee Tables - Working Demo</h1>
+    <p>This demo shows how to create sortable, searchable, and paginated tables from spreadsheet data using the Sheetsee Tables library.</p>
+
+    <div class="instructions">
+        <strong>How to use this demo:</strong>
+        <ul>
+            <li><strong>Sort:</strong> Click on any column header to sort by that column</li>
+            <li><strong>Search:</strong> Type in the search box to filter results</li>
+            <li><strong>Navigate:</strong> Use Previous/Next buttons to browse through pages</li>
+            <li><strong>Clear:</strong> Click "Clear" to reset the search</li>
+        </ul>
+    </div>
+
+    <div class="demo-section">
+        <h2>📊 Example 1: Employee Directory (with Pagination)</h2>
+        <p>This table demonstrates sorting, searching, and pagination features.</p>
+        
+        <input id="employeeFilter" type="text" placeholder="Search employees by name, department, or salary...">
+        <a href="#" class="clear">Clear Search</a>
+        <div id="employeeTable"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>🌍 Example 2: World Cities (Simple Table)</h2>
+        <p>This table shows basic sorting without pagination.</p>
+        
+        <div id="cityTable"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>📚 How to Use Sheetsee Tables</h2>
+        <p>Here's a quick example of how to create your own table:</p>
+        
+        <div class="code-block">
+// 1. Prepare your data
+var myData = [
+    {"Name": "John", "Age": "25", "City": "New York"},
+    {"Name": "Jane", "Age": "30", "City": "Los Angeles"}
+];
+
+// 2. Create your table
+var tableOptions = {
+    "data": myData,
+    "pagination": 10,
+    "tableDiv": "#myTable",
+    "filterDiv": "#myFilter",
+    "templateID": "myTable_template"
+};
+
+// 3. Initialize the table
+Sheetsee.makeTable(tableOptions);
+Sheetsee.initiateTableFilter(tableOptions);
+        </div>
+        
+        <p>For a complete step-by-step guide, see the <a href="STEP_BY_STEP_MANUAL.md">Step-by-Step Manual</a>.</p>
+    </div>
+
+    <!-- Template for the employee table -->
+    <script id="employeeTable_template" type="text/html">
+        <table>
+            <tr>
+                <th class="tHeader">Name</th>
+                <th class="tHeader">Department</th>
+                <th class="tHeader">Salary</th>
+                <th class="tHeader">StartDate</th>
+                <th class="tHeader">Status</th>
+            </tr>
+            {{#rows}}
+            <tr>
+                <td>{{Name}}</td>
+                <td>{{Department}}</td>
+                <td>{{Salary}}</td>
+                <td>{{StartDate}}</td>
+                <td>{{Status}}</td>
+            </tr>
+            {{/rows}}
+        </table>
+    </script>
+
+    <!-- Template for the city table -->
+    <script id="cityTable_template" type="text/html">
+        <table>
+            <tr>
+                <th class="tHeader">City</th>
+                <th class="tHeader">Country</th>
+                <th class="tHeader">Population</th>
+                <th class="tHeader">Continent</th>
+            </tr>
+            {{#rows}}
+            <tr>
+                <td>{{City}}</td>
+                <td>{{Country}}</td>
+                <td>{{Population}}</td>
+                <td>{{Continent}}</td>
+            </tr>
+            {{/rows}}
+        </table>
+    </script>
+
+    <script>
+        // Include the actual Sheetsee Tables library
+        var Sheetsee = (function() {
+            var tblOpts = {};
+
+            function makeTable(data) {
+                tblOpts = data;
+                tblOpts.sortMeta = {};
+                tblOpts.pgnMta = {};
+
+                if (!tblOpts.templateID) {
+                    tblOpts.templateID = tblOpts.tableDiv.replace('#', '') + '_template';
+                }
+
+                buildPaginationMeta(data.data, data.pagination);
+                prepTable();
+                initiateTableSorter();
+            }
+
+            function initiateTableSorter() {
+                document.body.addEventListener('click', function(event) {
+                    if (event.target.classList.contains('tHeader')) {
+                        perpareSort(event);
+                    }
+                });
+            }
+
+            function perpareSort(event) {
+                if (!tblOpts.sortMeta.sorted || tblOpts.sortMeta.sorted === 'descending') {
+                    tblOpts.sortMeta.sorted = 'ascending';
+                } else if (tblOpts.sortMeta.sorted === 'ascending') {
+                    tblOpts.sortMeta.sorted = 'descending';
+                }
+                tblOpts.sortMeta.sortBy = event.target.innerHTML.replace(/\s/g, '').replace(/\W/g, '');
+                tblOpts.tableDiv = '#' + event.target.closest('div').getAttribute('id');
+                sortData();
+            }
+
+            function sortData() {
+                var sortGroup;
+                if (tblOpts.filtering) {
+                    sortGroup = tblOpts.pgnMta.allRows;
+                } else {
+                    sortGroup = tblOpts.data;
+                }
+
+                sortGroup.sort(function(a, b) {
+                    var aa = a[tblOpts.sortMeta.sortBy].toLowerCase();
+                    var bb = b[tblOpts.sortMeta.sortBy].toLowerCase();
+                    aa = aa.match(/^[\d,]$/) ? Number(aa) : aa;
+                    bb = bb.match(/^[\d,]$/) ? Number(bb) : bb;
+
+                    if (aa < bb) return -1;
+                    if (aa > bb) return 1;
+                    return 0;
+                });
+                
+                if (tblOpts.sortMeta.sorted === 'descending') {
+                    sortGroup.reverse();
+                }
+                
+                if (tblOpts.pgnMta.dir) tblOpts.pgnMta.dir = Number(0);
+                
+                if (tblOpts.filtering) {
+                    prepTable(tblOpts.pgnMta.allRows);
+                } else {
+                    prepTable();
+                }
+            }
+
+            function initiateTableFilter(options) {
+                if (document.querySelector('.clear') === null) return;
+                if (!options.filterDiv) return;
+                if (document.getElementById(options.filterDiv.replace('#', '')) === null) return;
+
+                tblOpts.filtering = true;
+                var filterInput = document.getElementById(options.filterDiv.replace('#', ''));
+
+                document.querySelector('.clear').addEventListener('click', function() {
+                    filterInput.value = '';
+                    if (tblOpts.pgnMta.dir) tblOpts.pgnMta.dir = Number(0);
+                    prepTable();
+                });
+
+                filterInput.addEventListener('keyup', function(e) {
+                    searchTable(e.target.value);
+                });
+            }
+
+            function searchTable(searchTerm) {
+                var filteredList = [];
+                tblOpts.data.forEach(function(object) {
+                    var stringObject = JSON.stringify(object).toLowerCase();
+                    if (stringObject.match(searchTerm.toLowerCase())) {
+                        filteredList.push(object);
+                    }
+                });
+                
+                if (tblOpts.pgnMta.dir) tblOpts.pgnMta.dir = Number(0);
+                if (tblOpts.pgnMta.crntPage) tblOpts.pgnMta.crntPage = Number(1);
+                prepTable(filteredList);
+            }
+
+            function prepTable(filteredList) {
+                var data = filteredList || tblOpts.data;
+
+                if (!tblOpts.pagination) {
+                    return updateTable(data);
+                }
+
+                buildPaginationMeta(data);
+                updateTable(tblOpts.pgnMta.crntRows);
+                
+                if (data.length === 0) {
+                    addPaginationDOM(true);
+                } else {
+                    addPaginationDOM();
+                }
+            }
+
+            function updateTable(data) {
+                var rawTemplate = document.getElementById(tblOpts.templateID).innerHTML;
+                var content = Mustache.render(rawTemplate, {rows: data});
+                document.getElementById(tblOpts.tableDiv.replace('#', '')).innerHTML = content;
+            }
+
+            function buildPaginationMeta(data) {
+                var dir = tblOpts.pgnMta.dir || 0;
+                var current = tblOpts.pgnMta.crntPage || 1;
+                tblOpts.pgnMta.allRows = data;
+                tblOpts.pgnMta.allRowsLen = data.length;
+                tblOpts.pgnMta.totalPages = Math.ceil(tblOpts.pgnMta.allRowsLen / tblOpts.pagination);
+                tblOpts.pgnMta.crntPage = current + dir;
+                tblOpts.pgnMta.nextPage = tblOpts.pgnMta.crntPage - 1;
+                tblOpts.pgnMta.crntStart = (tblOpts.pgnMta.crntPage * tblOpts.pagination) - tblOpts.pagination;
+                tblOpts.pgnMta.crntEnd = tblOpts.pgnMta.crntPage * tblOpts.pagination;
+                tblOpts.pgnMta.crntRows = data.slice(tblOpts.pgnMta.crntStart, tblOpts.pgnMta.crntEnd);
+                return;
+            }
+
+            function addPaginationDOM(nopages) {
+                var tblId = tblOpts.tableDiv.slice(1);
+                var el = document.createElement('div');
+                el.setAttribute('id', 'Pagination');
+                el.setAttribute('pageno', tblOpts.pgnMta.crntPage);
+                el.classList.add('table-pagination');
+                
+                if (nopages) {
+                    el.innerHTML = 'No results found</div>';
+                } else if (tblOpts.pgnMta.allRowsLen <= tblOpts.pagination) {
+                    el.innerHTML = 'Page 1 of 1</div>';
+                } else {
+                    el.innerHTML = 'Showing page ' + tblOpts.pgnMta.crntPage + ' of ' +
+                    tblOpts.pgnMta.totalPages + " <a class='pagination-pre-" + tblId +
+                    "'>Previous</a>" + " <a class='pagination-next-" + tblId + "'>Next</a></div>";
+                }
+                
+                document.getElementById(tblId).append(el);
+                
+                if (nopages) return;
+                if (tblOpts.pgnMta.allRowsLen <= tblOpts.pagination) return;
+
+                if (tblOpts.pgnMta.crntPage >= tblOpts.pgnMta.totalPages) {
+                    document.querySelector('.pagination-next-' + tblId).classList.add('no-pag');
+                    document.querySelector('.pagination-pre-' + tblId).classList.remove('no-pag');
+                }
+                
+                if (tblOpts.pgnMta.crntPage === 1) {
+                    document.querySelector('.pagination-pre-' + tblId).classList.add('no-pag');
+                    document.querySelector('.pagination-next-' + tblId).classList.remove('no-pag');
+                }
+                
+                document.querySelector('.pagination-next-' + tblId).addEventListener('click', function(e) {
+                    if (e.target.classList.contains('no-pag')) return;
+                    tblOpts.pgnMta.dir = Number(1);
+                    if (tblOpts.filtering) {
+                        prepTable(tblOpts.pgnMta.allRows);
+                    } else {
+                        prepTable();
+                    }
+                });
+                
+                document.querySelector('.pagination-pre-' + tblId).addEventListener('click', function(e) {
+                    if (e.target.classList.contains('no-pag')) return;
+                    tblOpts.pgnMta.dir = Number(-1);
+                    if (tblOpts.filtering) {
+                        prepTable(tblOpts.pgnMta.allRows);
+                    } else {
+                        prepTable();
+                    }
+                });
+            }
+
+            return {
+                makeTable: makeTable,
+                initiateTableFilter: initiateTableFilter
+            };
+        })();
+
+        // Sample data for the employee table
+        var employeeData = [
+            {"Name": "Alice Johnson", "Department": "Engineering", "Salary": "$75,000", "StartDate": "2020-01-15", "Status": "Active"},
+            {"Name": "Bob Smith", "Department": "Marketing", "Salary": "$65,000", "StartDate": "2019-03-22", "Status": "Active"},
+            {"Name": "Carol Davis", "Department": "Engineering", "Salary": "$80,000", "StartDate": "2021-06-10", "Status": "Active"},
+            {"Name": "David Wilson", "Department": "Sales", "Salary": "$70,000", "StartDate": "2020-11-05", "Status": "Active"},
+            {"Name": "Eva Brown", "Department": "HR", "Salary": "$60,000", "StartDate": "2018-09-12", "Status": "Active"},
+            {"Name": "Frank Miller", "Department": "Engineering", "Salary": "$85,000", "StartDate": "2017-04-18", "Status": "Active"},
+            {"Name": "Grace Lee", "Department": "Marketing", "Salary": "$68,000", "StartDate": "2021-02-28", "Status": "Active"},
+            {"Name": "Henry Taylor", "Department": "Sales", "Salary": "$72,000", "StartDate": "2019-08-14", "Status": "Active"},
+            {"Name": "Ivy Chen", "Department": "HR", "Salary": "$62,000", "StartDate": "2020-05-03", "Status": "Active"},
+            {"Name": "Jack Anderson", "Department": "Engineering", "Salary": "$78,000", "StartDate": "2018-12-07", "Status": "Active"}
+        ];
+
+        // Sample data for the city table
+        var cityData = [
+            {"City": "New York", "Country": "USA", "Population": "8.4M", "Continent": "North America"},
+            {"City": "London", "Country": "UK", "Population": "9.5M", "Continent": "Europe"},
+            {"City": "Tokyo", "Country": "Japan", "Population": "14M", "Continent": "Asia"},
+            {"City": "Paris", "Country": "France", "Population": "11M", "Continent": "Europe"},
+            {"City": "Sydney", "Country": "Australia", "Population": "5.3M", "Continent": "Oceania"},
+            {"City": "São Paulo", "Country": "Brazil", "Population": "12M", "Continent": "South America"},
+            {"City": "Cairo", "Country": "Egypt", "Population": "10M", "Continent": "Africa"},
+            {"City": "Mumbai", "Country": "India", "Population": "20M", "Continent": "Asia"}
+        ];
+
+        // Initialize the tables when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Example 1: Employee table with pagination and search
+            var employeeOptions = {
+                "data": employeeData,
+                "pagination": 4,
+                "tableDiv": "#employeeTable",
+                "filterDiv": "#employeeFilter",
+                "templateID": "employeeTable_template"
+            };
+            Sheetsee.makeTable(employeeOptions);
+            Sheetsee.initiateTableFilter(employeeOptions);
+            
+            // Example 2: City table without pagination
+            var cityOptions = {
+                "data": cityData,
+                "tableDiv": "#cityTable",
+                "templateID": "cityTable_template"
+            };
+            Sheetsee.makeTable(cityOptions);
+        });
+    </script>
+</body>
+</html>
