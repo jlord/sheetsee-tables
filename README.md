@@ -136,3 +136,89 @@ _JavaScript_
 
 _[View Demo](http://jlord.us/sheetsee.js/demos/demo-table.html)_
 _[Visit Site](http://jlord.us/sheetsee.js)_
+
+## Step-by-Step: Build a Table from a Spreadsheet
+
+This section is a practical quick-start for users who want to go from
+spreadsheet data to a searchable/sortable table without relying on older demos.
+
+### 1. Create your HTML placeholders
+
+```html
+<input id="siteTableFilter" type="text" placeholder="Filter rows">
+<a href="#" class=".clear">Clear</a>
+<div id="siteTable"></div>
+```
+
+### 2. Add a Mustache template
+
+```html
+<script id="siteTable_template" type="text/html">
+  <table>
+    <tr>
+      <th class="tHeader">City</th>
+      <th class="tHeader">Place Name</th>
+      <th class="tHeader">Year</th>
+    </tr>
+    {{#rows}}
+      <tr>
+        <td>{{city}}</td>
+        <td>{{placename}}</td>
+        <td>{{year}}</td>
+      </tr>
+    {{/rows}}
+  </table>
+</script>
+```
+
+### 3. Fetch spreadsheet rows (for example with Tabletop.js)
+
+```javascript
+function onDataLoaded(data) {
+  var tableOptions = {
+    data: data,
+    pagination: 10,
+    tableDiv: "#siteTable",
+    filterDiv: "#siteTableFilter",
+    templateID: "siteTable_template"
+  }
+
+  Sheetsee.makeTable(tableOptions)
+  Sheetsee.initiateTableFilter(tableOptions)
+}
+```
+
+### 4. Verify column names and template keys
+
+- Your spreadsheet headers must match your Mustache keys (`{{city}}`, `{{placename}}`, etc.).
+- For sortable columns, header cells must use `.tHeader`.
+- Header text capitalization should match your spreadsheet headers (see sorting rules above).
+
+### 5. Styling and pagination hooks
+
+When `pagination` is enabled, the following classes/hooks are added:
+
+- `#Pagination`
+- `.pagination-pre`
+- `.pagination-next`
+- `.no-pag`
+
+Use these selectors to customize the table controls.
+
+### Troubleshooting checklist
+
+- Empty table: confirm `data` is an array and contains row objects.
+- Sorting not working: ensure table header cells include `class="tHeader"`.
+- Filter not working: make sure `filterDiv` points to the actual input id.
+- Template not found: ensure `templateID` matches your `<script id="...">`.
+
+## Issue #24 Acceptance Mapping
+
+This README update for issue #24 includes:
+
+- explicit end-to-end setup flow (HTML placeholder -> template -> script),
+- concrete parameter examples for `Sheetsee.makeTable` and filtering,
+- pagination hook references for quick styling and verification,
+- a practical troubleshooting checklist for the most common integration failures.
+
+The goal is to reduce reviewer ambiguity and make the docs immediately usable for new contributors.
