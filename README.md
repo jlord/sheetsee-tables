@@ -2,7 +2,7 @@
 
 # sheetsee-tables
 
-Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
+Sheetsee.js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
 
@@ -31,6 +31,65 @@ You can then style `.tHeader` in your CSS to make them look how you want.
 ## Your Script
 
 You'll want to set your table options and pass them into `Sheetsee.makeTable()`. If you want to add a search/filter, pass your options into `Sheetsee.initiateTableFilter()`.
+
+## Step-by-step table
+
+1. Add a filter input, a clear link with the `clear` class and an empty div for the table.
+
+```HTML
+<input id="siteTableFilter" type="text" placeholder="filter by.."></input>
+<a href="#" class="clear">Clear</a>
+<div id="siteTable"></div>
+```
+
+2. Add a Mustache template whose `id` is the table div id plus `_template`.
+
+```HTML
+<script id="siteTable_template" type="text/html">
+  <table>
+    <tr>
+      <th class="tHeader">City</th>
+      <th class="tHeader">Place Name</th>
+      <th class="tHeader">Year</th>
+    </tr>
+    {{#rows}}
+      <tr>
+        <td>{{City}}</td>
+        <td>{{PlaceName}}</td>
+        <td>{{Year}}</td>
+      </tr>
+    {{/rows}}
+  </table>
+</script>
+```
+
+3. Pass your spreadsheet rows into the table options. The object keys in each row should match the table header text after spaces are removed.
+
+```javascript
+var data = [
+  { City: 'Oakland', PlaceName: 'Lake Merritt', Year: '2017' },
+  { City: 'Portland', PlaceName: 'Forest Park', Year: '2018' }
+]
+
+var tableOptions = {
+  "data": data,
+  "pagination": 10,
+  "tableDiv": "#siteTable",
+  "filterDiv": "#siteTableFilter"
+}
+
+Sheetsee.makeTable(tableOptions)
+Sheetsee.initiateTableFilter(tableOptions)
+```
+
+4. To run the included local demo, install dependencies and build the browser bundle:
+
+```bash
+npm install
+npm run bfy
+```
+
+Then open `test/index.html` in a browser.
 
 ## Methods
 
@@ -85,7 +144,7 @@ If you want to have an input to allow users to search/filter the data in the tab
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,18 +158,18 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"></input><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
-        <tr><td>{{city}}</td><td>{{placename}}</td><td>{{year}}</td><td>{{image}}</td></tr>
+        <tr><td>{{City}}</td><td>{{PlaceName}}</td><td>{{Year}}</td><td>{{Image}}</td></tr>
       {{/rows}}
   </table>
 </script>
@@ -125,8 +184,7 @@ _JavaScript_
       "data": data,
       "pagination": 10,
       "tableDiv": "#siteTable",
-      "filterDiv": "#siteTableFilter",
-      "templateID": "siteTable_template"
+      "filterDiv": "#siteTableFilter"
     }
     Sheetsee.makeTable(tableOptions)
     Sheetsee.initiateTableFilter(tableOptions)
@@ -134,5 +192,4 @@ _JavaScript_
 </script>
 ```
 
-_[View Demo](http://jlord.us/sheetsee.js/demos/demo-table.html)_
-_[Visit Site](http://jlord.us/sheetsee.js)_
+_[Run the local demo](test/index.html)_ after building it with `npm run bfy`.
