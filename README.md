@@ -83,9 +83,9 @@ _CSS_
 
 If you want to have an input to allow users to search/filter the data in the table, you'll add an input to your HTML. Give it an id and if you want add placeholder text. You'll also need to add a 'clear' button using the `.clear` CSS class.
 
-```javascript
-<input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+```html
+<input id="tableFilter" type="text" placeholder="filter by..">
+<button type="button" class="clear">Clear</button>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -96,22 +96,26 @@ Sheetsee.initiateTableFilter(tableOptions)
 
 ## Example
 
+This example uses local data so you can verify the table without publishing a
+spreadsheet first.
+
 _HTML_
 
-```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+```html
+<input id="siteTableFilter" type="text" placeholder="filter by..">
+<button type="button" class="clear">Clear</button>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
-```JavaScript
-<script id="tableTemplate" type="text/html">
-    <table>
+```html
+<script id="siteTable_template" type="text/html">
+  <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
-      {{#rows}}
-        <tr><td>{{city}}</td><td>{{placename}}</td><td>{{year}}</td><td>{{image}}</td></tr>
-      {{/rows}}
+    {{#rows}}
+      <tr><td>{{city}}</td><td>{{placename}}</td><td>{{year}}</td><td>{{image}}</td></tr>
+    {{/rows}}
   </table>
 </script>
 ```
@@ -121,18 +125,53 @@ _JavaScript_
 ```javascript
 <script type="text/javascript">
   document.addEventListener('DOMContentLoaded', function() {
+    var data = [
+      {
+        "city": "New York",
+        "placename": "Central Park",
+        "year": "1858",
+        "image": "central-park.jpg"
+      },
+      {
+        "city": "Paris",
+        "placename": "Luxembourg Gardens",
+        "year": "1612",
+        "image": "luxembourg-gardens.jpg"
+      },
+      {
+        "city": "Tokyo",
+        "placename": "Ueno Park",
+        "year": "1873",
+        "image": "ueno-park.jpg"
+      }
+    ]
+
     var tableOptions = {
       "data": data,
       "pagination": 10,
       "tableDiv": "#siteTable",
-      "filterDiv": "#siteTableFilter",
-      "templateID": "siteTable_template"
+      "filterDiv": "#siteTableFilter"
     }
     Sheetsee.makeTable(tableOptions)
     Sheetsee.initiateTableFilter(tableOptions)
   })
 </script>
 ```
+
+### Step-by-step setup
+
+1. Add the filter input, clear button, and empty table placeholder to your page.
+2. Add a Mustache template whose `id` matches your table placeholder plus
+   `_template`. For `<div id="siteTable"></div>`, use
+   `<script id="siteTable_template" type="text/html">`.
+3. Make sure the column names inside `{{#rows}}` match your data object keys.
+4. Set `tableDiv` to the table placeholder selector, for example
+   `"#siteTable"`.
+5. Set `filterDiv` to the filter input selector, for example
+   `"#siteTableFilter"`.
+6. Call `Sheetsee.makeTable(tableOptions)`.
+7. Call `Sheetsee.initiateTableFilter(tableOptions)` only after the filter
+   input and `.clear` button exist in the DOM.
 
 _[View Demo](http://jlord.us/sheetsee.js/demos/demo-table.html)_
 _[Visit Site](http://jlord.us/sheetsee.js)_
