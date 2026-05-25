@@ -114,7 +114,7 @@ _Template_
   <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
     {{#rows}}
-      <tr><td>{{city}}</td><td>{{placename}}</td><td>{{year}}</td><td>{{image}}</td></tr>
+      <tr><td>{{City}}</td><td>{{PlaceName}}</td><td>{{Year}}</td><td>{{Image}}</td></tr>
     {{/rows}}
   </table>
 </script>
@@ -127,22 +127,22 @@ _JavaScript_
   document.addEventListener('DOMContentLoaded', function() {
     var data = [
       {
-        "city": "New York",
-        "placename": "Central Park",
-        "year": "1858",
-        "image": "central-park.jpg"
+        "City": "New York",
+        "PlaceName": "Central Park",
+        "Year": "1858",
+        "Image": "central-park.jpg"
       },
       {
-        "city": "Paris",
-        "placename": "Luxembourg Gardens",
-        "year": "1612",
-        "image": "luxembourg-gardens.jpg"
+        "City": "Paris",
+        "PlaceName": "Luxembourg Gardens",
+        "Year": "1612",
+        "Image": "luxembourg-gardens.jpg"
       },
       {
-        "city": "Tokyo",
-        "placename": "Ueno Park",
-        "year": "1873",
-        "image": "ueno-park.jpg"
+        "City": "Tokyo",
+        "PlaceName": "Ueno Park",
+        "Year": "1873",
+        "Image": "ueno-park.jpg"
       }
     ]
 
@@ -165,6 +165,8 @@ _JavaScript_
    `_template`. For `<div id="siteTable"></div>`, use
    `<script id="siteTable_template" type="text/html">`.
 3. Make sure the column names inside `{{#rows}}` match your data object keys.
+   Sortable `tHeader` labels are converted to keys by removing spaces and
+   punctuation, so a header like `Place Name` sorts against `PlaceName`.
 4. Set `tableDiv` to the table placeholder selector, for example
    `"#siteTable"`.
 5. Set `filterDiv` to the filter input selector, for example
