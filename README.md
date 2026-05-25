@@ -2,9 +2,86 @@
 
 # sheetsee-tables
 
-Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
+Sheetsee.js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
+
+## Step-by-step table manual
+
+The fastest way to check your setup is to start with one HTML file and inline data.
+
+1. Create an `index.html` file.
+2. Include Sheetsee and your data before the closing `</head>` tag.
+3. Add a filter input, a clear link, and an empty table placeholder.
+4. Add a Mustache template whose `id` is the table placeholder id plus `_template`.
+5. Call `Sheetsee.makeTable(tableOptions)`.
+6. Call `Sheetsee.initiateTableFilter(tableOptions)` if you added a filter input.
+
+Here is a complete working example:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sheetsee table example</title>
+    <script src="sheetsee.js"></script>
+    <script>
+      var data = [
+        { "Animal": "Cat", "Name": "Liza", "Rating": "10" },
+        { "Animal": "Dog", "Name": "Boo", "Rating": "9" },
+        { "Animal": "Dog", "Name": "Sam", "Rating": "10" },
+        { "Animal": "Cat", "Name": "Snowy", "Rating": "4" },
+        { "Animal": "Cat", "Name": "Trisana", "Rating": "7" }
+      ]
+    </script>
+  </head>
+  <body>
+    <input id="fullTableFilter" type="text" placeholder="filter by..">
+    <a href="#" class="clear">Clear</a>
+    <div id="fullTable"></div>
+
+    <script id="fullTable_template" type="text/html">
+      <table>
+        <tr>
+          <th class="tHeader">Animal</th>
+          <th class="tHeader">Name</th>
+          <th class="tHeader">Rating</th>
+        </tr>
+        {{#rows}}
+          <tr>
+            <td>{{Animal}}</td>
+            <td>{{Name}}</td>
+            <td>{{Rating}}</td>
+          </tr>
+        {{/rows}}
+      </table>
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var tableOptions = {
+          data: data,
+          pagination: 2,
+          tableDiv: '#fullTable',
+          filterDiv: '#fullTableFilter',
+          templateID: 'fullTable_template'
+        }
+
+        Sheetsee.makeTable(tableOptions)
+        Sheetsee.initiateTableFilter(tableOptions)
+      })
+    </script>
+  </body>
+</html>
+```
+
+After opening the page in a browser, try these checks:
+
+- Type `cat` in the filter input. The table should show the three cat rows.
+- Click `Clear`. All rows should return.
+- Click the `Rating` header. The rows should sort by rating.
+- Use the pagination links to move between pages.
 
 ## Your HTML Placeholder
 
@@ -84,8 +161,8 @@ _CSS_
 If you want to have an input to allow users to search/filter the data in the table, you'll add an input to your HTML. Give it an id and if you want add placeholder text. You'll also need to add a 'clear' button using the `.clear` CSS class.
 
 ```javascript
-<input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<input id="tableFilter" type="text" placeholder="filter by..">
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,14 +176,14 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
