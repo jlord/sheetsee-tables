@@ -20,7 +20,7 @@
   <body>
     <div class="container">
       <h1>All Pennies</h1>
-      <input id="fullTableFilter" type="text" placeholder="filter by.."></input>
+      <input id="fullTableFilter" type="text" placeholder="filter by..">
       <a href="#" class="clear">Clear</a>
       <div id="fullTable"></div>
   </div>
@@ -41,7 +41,7 @@
 
     function showInfo() {
       var tableOptions = {
-        "data": data,
+        "data": window.data,
         "pagination": 2,
         "tableDiv": "#fullTable",
         "filterDiv": "#fullTableFilter"
