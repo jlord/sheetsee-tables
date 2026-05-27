@@ -2,7 +2,7 @@
 
 # sheetsee-tables
 
-Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
+Sheetsee.js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
 
@@ -57,6 +57,90 @@ var tableOptions = {
 Sheetsee.makeTable(tableOptions)
 ```
 
+## Step-by-step: spreadsheet rows to a table
+
+These steps create a searchable, sortable and paginated table from spreadsheet-style rows.
+
+### 1. Add the HTML
+
+Create one filter input, one clear link and one empty table placeholder.
+
+```html
+<input id="siteTableFilter" type="text" placeholder="filter by..">
+<a href="#" class="clear">Clear</a>
+<div id="siteTable"></div>
+```
+
+### 2. Add the table template
+
+The template id must match the `templateID` option used in JavaScript. Header text with the `tHeader` class is used for sorting, so keep the header text aligned with your data keys. Spaces in the header are removed when matching a key, so a `Place Name` header sorts by `PlaceName`.
+
+```html
+<script id="siteTable_template" type="text/html">
+  <table>
+    <tr>
+      <th class="tHeader">City</th>
+      <th class="tHeader">Place Name</th>
+      <th class="tHeader">Year</th>
+      <th class="tHeader">Image</th>
+    </tr>
+    {{#rows}}
+      <tr>
+        <td>{{City}}</td>
+        <td>{{PlaceName}}</td>
+        <td>{{Year}}</td>
+        <td>{{Image}}</td>
+      </tr>
+    {{/rows}}
+  </table>
+</script>
+```
+
+### 3. Pass in rows
+
+Rows can come from Tabletop.js, another spreadsheet loader, or a local array while you are testing. Each row should use keys that match the template.
+
+```html
+<script>
+  var data = [
+    { City: 'Oakland', PlaceName: 'Lake Merritt', Year: '2024', Image: 'lake.jpg' },
+    { City: 'Portland', PlaceName: 'Forest Park', Year: '2023', Image: 'forest.jpg' }
+  ]
+</script>
+```
+
+### 4. Build the table
+
+Run the setup after the DOM is loaded.
+
+```html
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var tableOptions = {
+      data: data,
+      pagination: 10,
+      tableDiv: '#siteTable',
+      filterDiv: '#siteTableFilter',
+      templateID: 'siteTable_template'
+    }
+
+    Sheetsee.makeTable(tableOptions)
+    Sheetsee.initiateTableFilter(tableOptions)
+  })
+</script>
+```
+
+### 5. Run the included demo
+
+Install dependencies, build the browser bundle and open `test/index.html` in a browser.
+
+```bash
+npm install
+npm run bfy
+```
+
+The demo should show a five-row table, filter `cat` down to three rows, sort the `Rating` column numerically and paginate two rows at a time.
+
 #### Pagination
 
 If you do not put in a number for pagination, by default it will show all of the data at once. With pagination, HTML will be added at the bottom of your table for navigation, which you can style in your CSS:
@@ -85,7 +169,7 @@ If you want to have an input to allow users to search/filter the data in the tab
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,18 +183,18 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"></input><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
-        <tr><td>{{city}}</td><td>{{placename}}</td><td>{{year}}</td><td>{{image}}</td></tr>
+        <tr><td>{{City}}</td><td>{{PlaceName}}</td><td>{{Year}}</td><td>{{Image}}</td></tr>
       {{/rows}}
   </table>
 </script>

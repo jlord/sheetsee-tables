@@ -13,12 +13,11 @@ npm run bfy
 
 # QA
 
-- [ ] **Filter** Typing 'cat' should return one page with 3 results
+- [ ] **Filter** Typing 'cat' should return 3 results across 2 pages
   - [ ] Sorting while filtering shouldn't reset
   - [ ] Filtering shouldn't mess up pagination
 - [ ] **No Matches** Typing jibberish returns empty table
-- [ ] **One page of pagination** Should change pagaination dom
+- [ ] **One page of pagination** Should change pagination dom
 - [ ] **Clear** Clear button should clear filter and all data returns
 - [ ] **Sort** Click the arrows in Rating and table sorts
 - [ ] **Pagination** Should be able to navigate between two pages
-  - [ ] **Pagination** Should be able to navigate between two pages
