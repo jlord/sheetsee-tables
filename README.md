@@ -4,7 +4,91 @@
 
 Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
-You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
+You'll need a placeholder `<div>` in your HTML, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
+
+## Step-by-step table setup
+
+This walkthrough uses local data so you can verify the table setup before wiring in a spreadsheet loader such as Tabletop.js.
+
+### 1. Add the scripts
+
+Load Sheetsee, Mustache through the bundled Sheetsee build, and your data before the script that creates the table.
+
+```HTML
+<script src="sheetsee.js"></script>
+<script src="data.js"></script>
+```
+
+Your data should be an array of objects. The object keys are the names you will use in the Mustache template.
+
+```javascript
+var data = [
+  {City: 'Oakland', PlaceName: 'Lake Merritt', Year: '1870'},
+  {City: 'Detroit', PlaceName: 'Belle Isle', Year: '1845'}
+]
+```
+
+### 2. Add a filter input and table placeholder
+
+The filter input is optional. If you use one, its `id` must match the `filterDiv` option you pass to `Sheetsee.initiateTableFilter()`.
+
+```HTML
+<input id="siteTableFilter" type="text" placeholder="filter by...">
+<a href="#" class="clear">Clear</a>
+<div id="siteTable"></div>
+```
+
+### 3. Add a Mustache table template
+
+The template can use any markup, but sortable headers must use the `tHeader` class. Header text is converted to a data key by removing spaces and punctuation, so `Place Name` maps to `PlaceName`.
+
+If you do not set `templateID` in your options, the template `id` must be the table placeholder `id` plus `_template`.
+
+```HTML
+<script id="siteTable_template" type="text/html">
+  <table>
+    <tr>
+      <th class="tHeader">City</th>
+      <th class="tHeader">Place Name</th>
+      <th class="tHeader">Year</th>
+    </tr>
+    {{#rows}}
+      <tr>
+        <td>{{City}}</td>
+        <td>{{PlaceName}}</td>
+        <td>{{Year}}</td>
+      </tr>
+    {{/rows}}
+  </table>
+</script>
+```
+
+### 4. Create the table
+
+Pass the same options object to both methods when you want search/filter support.
+
+```HTML
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var tableOptions = {
+      data: data,
+      pagination: 10,
+      tableDiv: '#siteTable',
+      filterDiv: '#siteTableFilter'
+    }
+
+    Sheetsee.makeTable(tableOptions)
+    Sheetsee.initiateTableFilter(tableOptions)
+  })
+</script>
+```
+
+### 5. Check the common gotchas
+
+- The template `id` should be `siteTable_template` for a table placeholder of `#siteTable`, unless you set `templateID` yourself.
+- The clear link must use `class="clear"`; do not include a dot inside the class value.
+- Sortable header text must match your data keys after spaces and punctuation are removed.
+- Template variables are case-sensitive, so `{{PlaceName}}` and `{{placename}}` are different.
 
 ## Your HTML Placeholder
 
@@ -84,8 +168,8 @@ _CSS_
 If you want to have an input to allow users to search/filter the data in the table, you'll add an input to your HTML. Give it an id and if you want add placeholder text. You'll also need to add a 'clear' button using the `.clear` CSS class.
 
 ```javascript
-<input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<input id="tableFilter" type="text" placeholder="filter by..">
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,18 +183,18 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
-        <tr><td>{{city}}</td><td>{{placename}}</td><td>{{year}}</td><td>{{image}}</td></tr>
+        <tr><td>{{City}}</td><td>{{PlaceName}}</td><td>{{Year}}</td><td>{{Image}}</td></tr>
       {{/rows}}
   </table>
 </script>
