@@ -6,6 +6,71 @@ Sheetsee,js uses this module to make tables. With this module you can create tab
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
 
+## Quick start: create a table from spreadsheet data
+
+Sheetsee tables expect spreadsheet rows as an array of objects. Each object key is a column name and each object is one row. For example, a spreadsheet with `Animal`, `Name`, and `Rating` columns can be represented like this:
+
+```javascript
+var data = [
+  {"Animal": "Cat", "Name": "Liza", "Rating": "10"},
+  {"Animal": "Dog", "Name": "Boo", "Rating": "9"},
+  {"Animal": "Dog", "Name": "Sam", "Rating": "10"}
+]
+```
+
+You can load that array from a spreadsheet tool such as Tabletop.js, or start with a local JavaScript array while you build your table.
+
+### 1. Add a filter input and table placeholder
+
+```html
+<input id="animalTableFilter" type="text" placeholder="filter by animal, name, or rating">
+<a href="#" class="clear">Clear</a>
+<div id="animalTable"></div>
+```
+
+### 2. Add a Mustache template
+
+The template id should match the table placeholder id plus `_template`.
+
+```html
+<script id="animalTable_template" type="text/html">
+  <table>
+    <tr>
+      <th class="tHeader">Animal</th>
+      <th class="tHeader">Name</th>
+      <th class="tHeader">Rating</th>
+    </tr>
+    {{#rows}}
+      <tr>
+        <td>{{Animal}}</td>
+        <td>{{Name}}</td>
+        <td>{{Rating}}</td>
+      </tr>
+    {{/rows}}
+  </table>
+</script>
+```
+
+### 3. Build the table
+
+```html
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var tableOptions = {
+      data: data,
+      pagination: 10,
+      tableDiv: '#animalTable',
+      filterDiv: '#animalTableFilter'
+    }
+
+    Sheetsee.makeTable(tableOptions)
+    Sheetsee.initiateTableFilter(tableOptions)
+  })
+</script>
+```
+
+This creates a sortable table, shows up to 10 rows per page, and lets users filter across the row values. For sorting to work, the text inside each `.tHeader` should match the spreadsheet column name after spaces and punctuation are removed.
+
 ## Your HTML Placeholder
 
 This is as simple as an empty `<div>` with an `id`.
