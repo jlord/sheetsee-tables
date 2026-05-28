@@ -6,6 +6,120 @@ Sheetsee,js uses this module to make tables. With this module you can create tab
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
 
+## Step-by-step: build a table from spreadsheet data
+
+This walkthrough shows the smallest working setup: one HTML file, one data file, and Sheetsee Tables.
+
+### 1. Prepare spreadsheet-style data
+
+Sheetsee Tables expects an array of objects. Each object is one spreadsheet row and each key is a column name.
+
+Create a `data.js` file:
+
+```javascript
+var data = [
+  {
+    city: "Oakland",
+    placename: "Lake Merritt",
+    year: "1870",
+    image: "lake-merritt.jpg"
+  },
+  {
+    city: "Portland",
+    placename: "Powell's Books",
+    year: "1971",
+    image: "powells.jpg"
+  },
+  {
+    city: "New York",
+    placename: "Bryant Park",
+    year: "1847",
+    image: "bryant-park.jpg"
+  }
+]
+```
+
+If your data comes from a spreadsheet, export or fetch it so the final value passed to Sheetsee is shaped like the `data` array above.
+
+### 2. Add the HTML placeholder and filter input
+
+Create an `index.html` file and add an input for filtering plus an empty table container:
+
+```html
+<input id="siteTableFilter" type="text" placeholder="Filter by city, place, or year">
+<a href="#" class="clear">Clear</a>
+<div id="siteTable"></div>
+```
+
+The `siteTable` id is where the rendered table will be inserted.
+
+### 3. Add a Mustache template
+
+Add this template in the same HTML file. The `{{#rows}}` block is repeated once for every row on the current page.
+
+```html
+<script id="siteTable_template" type="text/html">
+  <table>
+    <thead>
+      <tr>
+        <th class="tHeader">City</th>
+        <th class="tHeader">Place Name</th>
+        <th class="tHeader">Year</th>
+        <th>Image</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#rows}}
+        <tr>
+          <td>{{city}}</td>
+          <td>{{placename}}</td>
+          <td>{{year}}</td>
+          <td>{{image}}</td>
+        </tr>
+      {{/rows}}
+    </tbody>
+  </table>
+</script>
+```
+
+Headers with `class="tHeader"` can be clicked to sort the table.
+
+### 4. Load scripts and render the table
+
+Load your data and Sheetsee Tables, then call `makeTable` and `initiateTableFilter`.
+
+```html
+<script src="data.js"></script>
+<script src="bundle.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var tableOptions = {
+      data: data,
+      pagination: 10,
+      tableDiv: "#siteTable",
+      filterDiv: "#siteTableFilter",
+      templateID: "siteTable_template"
+    }
+
+    Sheetsee.makeTable(tableOptions)
+    Sheetsee.initiateTableFilter(tableOptions)
+  })
+</script>
+```
+
+The `bundle.js` file should expose `Sheetsee` in the browser. In this repository, run `npm run bfy` to build the test bundle used by `test/index.html`.
+
+### 5. Open and test
+
+Open the page in a browser and check that:
+
+- rows appear inside `#siteTable`
+- typing in `#siteTableFilter` narrows the visible rows
+- clicking `City`, `Place Name`, or `Year` sorts the table
+- pagination controls appear when the data has more rows than the `pagination` value
+
+If nothing renders, first check the browser console for missing script files, mismatched ids, or data keys that do not match the template.
+
 ## Your HTML Placeholder
 
 This is as simple as an empty `<div>` with an `id`.
