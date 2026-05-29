@@ -1,6 +1,7 @@
 var fs = require('fs')
 var browserify = require('browserify')
+var path = require('path')
 
-browserify(__dirname + '/set.js')
+browserify(path.join(__dirname, 'set.js'))
   .bundle()
-  .pipe(fs.createWriteStream(__dirname + '/sheetsee.js'))
+  .pipe(fs.createWriteStream(path.join(__dirname, 'sheetsee.js')))
