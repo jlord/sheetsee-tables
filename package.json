@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "standard",
     "test": "node test/browserify.js && open test/index.html",
-    "bfy": "node test/browserify.js"
+    "bfy": "node test/browserify.js",
+    "example": "node examples/browserify.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,12 @@
     "spreadsheet",
     "tables"
   ],
+  "standard": {
+    "ignore": [
+      "examples/sheetsee-tables.js",
+      "test/data.js"
+    ]
+  },
   "dependencies": {
     "mustache": "^2.3.0"
   },

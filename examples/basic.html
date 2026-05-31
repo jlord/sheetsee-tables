@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sheetsee Tables Basic Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./sheetsee-tables.js"></script>
+    <style>
+      body {
+        color: #222;
+        font-family: Helvetica, Arial, sans-serif;
+        line-height: 1.4;
+        margin: 2rem auto;
+        max-width: 780px;
+        padding: 0 1rem;
+      }
+
+      table {
+        border-collapse: collapse;
+        margin-top: 1rem;
+        width: 100%;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid #ddd;
+        padding: 0.6rem;
+        text-align: left;
+      }
+
+      .tHeader {
+        cursor: pointer;
+      }
+
+      .tHeader::after {
+        content: " \\2193 \\2191";
+        font-size: 0.7rem;
+      }
+
+      .table-pagination {
+        margin-top: 1rem;
+      }
+
+      .table-pagination a {
+        cursor: pointer;
+        margin-left: 0.8rem;
+      }
+
+      .no-pag {
+        color: #999;
+        cursor: default;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Sheetsee Tables Basic Example</h1>
+    <p>Type in the filter box, click a table header to sort, and use pagination below the table.</p>
+
+    <label for="siteTableFilter">Filter rows</label>
+    <input id="siteTableFilter" type="text" placeholder="try cat or dog">
+    <a href="#" class="clear">Clear</a>
+
+    <div id="siteTable"></div>
+
+    <script id="siteTable_template" type="text/html">
+      <table>
+        <thead>
+          <tr>
+            <th class="tHeader">Animal</th>
+            <th class="tHeader">Name</th>
+            <th class="tHeader">Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#rows}}
+            <tr>
+              <td>{{Animal}}</td>
+              <td>{{Name}}</td>
+              <td>{{Rating}}</td>
+            </tr>
+          {{/rows}}
+        </tbody>
+      </table>
+    </script>
+
+    <script>
+      var data = [
+        { Animal: 'Cat', Name: 'Liza', Rating: '10' },
+        { Animal: 'Dog', Name: 'Boo', Rating: '9' },
+        { Animal: 'Dog', Name: 'Sam', Rating: '10' },
+        { Animal: 'Cat', Name: 'Snowy', Rating: '4' },
+        { Animal: 'Cat', Name: 'Trisana', Rating: '7' }
+      ]
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var tableOptions = {
+          data: data,
+          pagination: 2,
+          tableDiv: '#siteTable',
+          filterDiv: '#siteTableFilter',
+          templateID: 'siteTable_template'
+        }
+
+        Sheetsee.makeTable(tableOptions)
+        Sheetsee.initiateTableFilter(tableOptions)
+      })
+    </script>
+  </body>
+</html>
