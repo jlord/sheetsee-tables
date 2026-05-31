@@ -19,6 +19,6 @@ npm run bfy
 - [ ] **No Matches** Typing jibberish returns empty table
 - [ ] **One page of pagination** Should change pagaination dom
 - [ ] **Clear** Clear button should clear filter and all data returns
-- [ ] **Sort** Click the arrows in Rating and table sorts
+- [ ] **Sort** Click the arrows in Rating and table sorts numerically: 4, 7, 9, 10, 10
 - [ ] **Pagination** Should be able to navigate between two pages
   - [ ] **Pagination** Should be able to navigate between two pages

@@ -46,10 +46,8 @@ function sortData () {
   else sortGroup = tblOpts.data
 
   sortGroup.sort(function (a, b) {
-    var aa = a[tblOpts.sortMeta.sortBy].toLowerCase()
-    var bb = b[tblOpts.sortMeta.sortBy].toLowerCase()
-    aa = aa.match(/^[\d,]$/) ? Number(aa) : aa
-    bb = bb.match(/^[\d,]$/) ? Number(bb) : bb
+    var aa = normalizeSortValue(a[tblOpts.sortMeta.sortBy])
+    var bb = normalizeSortValue(b[tblOpts.sortMeta.sortBy])
 
     if (aa < bb) return -1
     if (aa > bb) return 1
@@ -61,6 +59,14 @@ function sortData () {
   // If the table has been filtered, just sort those
   if (tblOpts.filtering) prepTable(tblOpts.pgnMta.allRows)
   else prepTable()
+}
+
+function normalizeSortValue (value) {
+  var normalized = String(value).toLowerCase()
+  if (/^-?[\d,]+(\.\d+)?$/.test(normalized)) {
+    return Number(normalized.replace(/,/g, ''))
+  }
+  return normalized
 }
 
 // FITERING
