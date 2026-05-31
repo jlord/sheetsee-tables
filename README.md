@@ -2,9 +2,83 @@
 
 # sheetsee-tables
 
-Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
+Sheetsee.js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
+
+## Quick start
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Build the local browser example:
+
+```bash
+npm run example
+```
+
+3. Open `examples/basic.html` in your browser.
+
+The example shows the complete flow: render spreadsheet-like rows, filter them with a text input, sort by clicking table headers, clear the filter, and paginate through the table.
+
+## Step-by-step table setup
+
+### 1. Add a filter input, clear link and table placeholder
+
+```HTML
+<input id="siteTableFilter" type="text" placeholder="filter by...">
+<a href="#" class="clear">Clear</a>
+<div id="siteTable"></div>
+```
+
+The table placeholder can be any empty element, but its `id` must match the `tableDiv` option in your script.
+
+### 2. Add a Mustache template
+
+```HTML
+<script id="siteTable_template" type="text/html">
+  <table>
+    <tr>
+      <th class="tHeader">Animal</th>
+      <th class="tHeader">Name</th>
+      <th class="tHeader">Rating</th>
+    </tr>
+    {{#rows}}
+      <tr>
+        <td>{{Animal}}</td>
+        <td>{{Name}}</td>
+        <td>{{Rating}}</td>
+      </tr>
+    {{/rows}}
+  </table>
+</script>
+```
+
+The template id defaults to your table placeholder id plus `_template`, so `#siteTable` uses `siteTable_template`.
+
+### 3. Pass your rows into Sheetsee
+
+```javascript
+var data = [
+  { Animal: 'Cat', Name: 'Liza', Rating: '10' },
+  { Animal: 'Dog', Name: 'Boo', Rating: '9' },
+  { Animal: 'Cat', Name: 'Snowy', Rating: '4' }
+]
+
+var tableOptions = {
+  data: data,
+  pagination: 10,
+  tableDiv: '#siteTable',
+  filterDiv: '#siteTableFilter',
+  templateID: 'siteTable_template'
+}
+
+Sheetsee.makeTable(tableOptions)
+Sheetsee.initiateTableFilter(tableOptions)
+```
 
 ## Your HTML Placeholder
 
@@ -84,8 +158,8 @@ _CSS_
 If you want to have an input to allow users to search/filter the data in the table, you'll add an input to your HTML. Give it an id and if you want add placeholder text. You'll also need to add a 'clear' button using the `.clear` CSS class.
 
 ```javascript
-<input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<input id="tableFilter" type="text" placeholder="filter by..">
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,14 +173,14 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
@@ -121,6 +195,11 @@ _JavaScript_
 ```javascript
 <script type="text/javascript">
   document.addEventListener('DOMContentLoaded', function() {
+    var data = [
+      { city: 'San Francisco', placename: 'Sutro Baths', year: '1896', image: 'sutro.jpg' },
+      { city: 'Oakland', placename: 'Lake Merritt', year: '1870', image: 'lake.jpg' }
+    ]
+
     var tableOptions = {
       "data": data,
       "pagination": 10,
@@ -134,5 +213,4 @@ _JavaScript_
 </script>
 ```
 
-_[View Demo](http://jlord.us/sheetsee.js/demos/demo-table.html)_
-_[Visit Site](http://jlord.us/sheetsee.js)_
+_Local demo: run `npm run example`, then open `examples/basic.html`._
