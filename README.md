@@ -2,9 +2,63 @@
 
 # sheetsee-tables
 
-Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
+Sheetsee.js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
+
+## Step-by-step table
+
+This minimal example builds a searchable, sortable table from spreadsheet-like JSON data. It can also be used before adding Tabletop.js, because Sheetsee only needs an array of row objects.
+
+1. Add an input for filtering.
+2. Add an empty placeholder for the rendered table.
+3. Add a Mustache template whose `id` matches the `templateID` option.
+4. Pass your row data to `Sheetsee.makeTable()`.
+5. Pass the same options to `Sheetsee.initiateTableFilter()` if you want search.
+
+```HTML
+<input id="siteTableFilter" type="text" placeholder="filter by city">
+<a href="#" class="clear">Clear</a>
+<div id="siteTable"></div>
+
+<script id="siteTable_template" type="text/html">
+  <table>
+    <tr>
+      <th class="tHeader">City</th>
+      <th class="tHeader">Place Name</th>
+      <th class="tHeader">Year</th>
+    </tr>
+    {{#rows}}
+      <tr>
+        <td>{{city}}</td>
+        <td>{{placename}}</td>
+        <td>{{year}}</td>
+      </tr>
+    {{/rows}}
+  </table>
+</script>
+
+<script>
+var data = [
+  { city: 'Oakland', placename: 'Lake Merritt', year: '2013' },
+  { city: 'San Francisco', placename: 'Sutro Baths', year: '2014' },
+  { city: 'Portland', placename: 'Forest Park', year: '2015' }
+]
+
+var tableOptions = {
+  data: data,
+  pagination: 10,
+  tableDiv: '#siteTable',
+  filterDiv: '#siteTableFilter',
+  templateID: 'siteTable_template'
+}
+
+Sheetsee.makeTable(tableOptions)
+Sheetsee.initiateTableFilter(tableOptions)
+</script>
+```
+
+For spreadsheet data loaded through Tabletop.js, use the returned array in place of the inline `data` array above.
 
 ## Your HTML Placeholder
 
@@ -85,7 +139,7 @@ If you want to have an input to allow users to search/filter the data in the tab
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,14 +153,14 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"></input><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
