@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sheetsee Tables Basic Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        font-family: Helvetica, Arial, sans-serif;
+        line-height: 1.4;
+        margin: 32px auto;
+        max-width: 760px;
+      }
+
+      input {
+        border: 1px solid #999;
+        margin: 0 8px 16px 0;
+        padding: 8px;
+        width: 240px;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+
+      th {
+        background: #f4f4f4;
+      }
+
+      .tHeader {
+        cursor: pointer;
+      }
+
+      .tHeader::after {
+        content: " sort";
+        color: #777;
+        font-size: 11px;
+        font-weight: normal;
+      }
+
+      #Pagination {
+        margin-top: 12px;
+      }
+
+      #Pagination a {
+        cursor: pointer;
+        margin-left: 12px;
+      }
+
+      .no-pag {
+        color: #aaa;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Sheetsee Tables Basic Demo</h1>
+    <p>Filter the rows, sort by clicking a header, or use pagination at the bottom.</p>
+
+    <input id="siteTableFilter" type="text" placeholder="filter by city, place, year or type">
+    <a href="#" class="clear">Clear</a>
+    <div id="siteTable"></div>
+
+    <script id="siteTable_template" type="text/html">
+      <table>
+        <tr>
+          <th class="tHeader">City</th>
+          <th class="tHeader">Place Name</th>
+          <th class="tHeader">Year</th>
+          <th class="tHeader">Category</th>
+        </tr>
+        {{#rows}}
+          <tr>
+            <td>{{City}}</td>
+            <td>{{PlaceName}}</td>
+            <td>{{Year}}</td>
+            <td>{{Category}}</td>
+          </tr>
+        {{/rows}}
+      </table>
+    </script>
+    <script src="sheetsee-tables.js"></script>
+  </body>
+</html>

@@ -4,6 +4,7 @@
   "description": "enables table creating functionality with sheetsee.js",
   "main": "index.js",
   "scripts": {
+    "demo": "browserify examples/basic.js -o examples/sheetsee-tables.js",
     "lint": "standard",
     "test": "node test/browserify.js && open test/index.html",
     "bfy": "node test/browserify.js"
