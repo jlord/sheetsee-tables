@@ -4,6 +4,11 @@
 
 Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
+## Step-by-step guide
+
+If you are starting from a spreadsheet, see
+[Create a table from spreadsheet data](docs/table-from-spreadsheet.md).
+
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
 
 ## Your HTML Placeholder
@@ -126,7 +131,7 @@ _JavaScript_
       "pagination": 10,
       "tableDiv": "#siteTable",
       "filterDiv": "#siteTableFilter",
-      "templateID": "siteTable_template"
+      "templateID": "tableTemplate"
     }
     Sheetsee.makeTable(tableOptions)
     Sheetsee.initiateTableFilter(tableOptions)
