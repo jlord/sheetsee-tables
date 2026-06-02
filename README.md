@@ -2,9 +2,29 @@
 
 # sheetsee-tables
 
-Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
+Sheetsee.js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
+
+## Step-by-step demo
+
+The repository includes a small working demo in `test/index.html`.
+
+```bash
+npm install
+npm run bfy
+open test/index.html
+```
+
+The demo loads `test/data.js`, builds a paginated table, supports filtering, clears the filter, and sorts by clicking table headers.
+
+To create your own table from scratch:
+
+1. Add an empty table container, for example `<div id="siteTable"></div>`.
+2. Add a filter input and clear link if you want search: `<input id="siteTableFilter" type="text"> <a href="#" class="clear">Clear</a>`.
+3. Add a Mustache template. Its `id` should match the `templateID` option you pass to `Sheetsee.makeTable()`.
+4. Create a `tableOptions` object with `data`, `tableDiv`, optional `filterDiv`, optional `pagination`, and optional `templateID`.
+5. Call `Sheetsee.makeTable(tableOptions)`, then `Sheetsee.initiateTableFilter(tableOptions)` if using a filter.
 
 ## Your HTML Placeholder
 
@@ -85,7 +105,7 @@ If you want to have an input to allow users to search/filter the data in the tab
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,19 +119,19 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"></input><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
-    <table>
+<script id="siteTable_template" type="text/html">
+  <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
-      {{#rows}}
-        <tr><td>{{city}}</td><td>{{placename}}</td><td>{{year}}</td><td>{{image}}</td></tr>
-      {{/rows}}
+    {{#rows}}
+      <tr><td>{{city}}</td><td>{{placename}}</td><td>{{year}}</td><td>{{image}}</td></tr>
+    {{/rows}}
   </table>
 </script>
 ```
@@ -134,5 +154,6 @@ _JavaScript_
 </script>
 ```
 
-_[View Demo](http://jlord.us/sheetsee.js/demos/demo-table.html)_
+Run the local demo with `npm run bfy` and then open `test/index.html`.
+
 _[Visit Site](http://jlord.us/sheetsee.js)_
