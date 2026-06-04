@@ -83,6 +83,16 @@ Minimal working example:
 </script>
 ```
 
+You can also check the bundled local demo:
+
+```bash
+npm install
+npm run bfy
+open test/index.html
+```
+
+The demo in `test/index.html` uses `#fullTable`, `#fullTableFilter`, a `.clear` link and the default `fullTable_template` id generated from `tableDiv`.
+
 ## Methods
 
 Functions for you to use! There are just two, woo!
