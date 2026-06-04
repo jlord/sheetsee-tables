@@ -32,6 +32,67 @@ You can then style `.tHeader` in your CSS to make them look how you want.
 
 You'll want to set your table options and pass them into `Sheetsee.makeTable()`. If you want to add a search/filter, pass your options into `Sheetsee.initiateTableFilter()`.
 
+## Step-by-step table setup
+
+1. Add an empty placeholder element where the table should appear.
+2. Add a filter input and a clear link if you want search.
+3. Add a Mustache template whose `id` matches your `templateID`.
+4. Build a `tableOptions` object with your spreadsheet rows in `data`.
+5. Call `Sheetsee.makeTable(tableOptions)`.
+6. Call `Sheetsee.initiateTableFilter(tableOptions)` only when you have a filter input and a `.clear` link.
+
+Minimal working example:
+
+```HTML
+<input id="siteTableFilter" type="text" placeholder="filter by city">
+<a href="#" class="clear">Clear</a>
+<div id="siteTable"></div>
+
+<script id="siteTable_template" type="text/html">
+  <table>
+    <tr>
+      <th class="tHeader">City</th>
+      <th class="tHeader">Place Name</th>
+      <th class="tHeader">Year</th>
+      <th class="tHeader">Image</th>
+    </tr>
+    {{#rows}}
+      <tr>
+        <td>{{city}}</td>
+        <td>{{placename}}</td>
+        <td>{{year}}</td>
+        <td>{{image}}</td>
+      </tr>
+    {{/rows}}
+  </table>
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var tableOptions = {
+      "data": data,
+      "pagination": 10,
+      "tableDiv": "#siteTable",
+      "filterDiv": "#siteTableFilter",
+      "templateID": "siteTable_template"
+    }
+
+    Sheetsee.makeTable(tableOptions)
+    Sheetsee.initiateTableFilter(tableOptions)
+  })
+</script>
+```
+
+You can also check the bundled local demo:
+
+```bash
+npm install
+npm run bfy
+open test/index.html
+```
+
+The demo in `test/index.html` uses `#fullTable`, `#fullTableFilter`, a `.clear` link and the default `fullTable_template` id generated from `tableDiv`.
+
 ## Methods
 
 Functions for you to use! There are just two, woo!
@@ -85,7 +146,7 @@ If you want to have an input to allow users to search/filter the data in the tab
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,14 +160,14 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"></input><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
