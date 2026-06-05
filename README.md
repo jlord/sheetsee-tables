@@ -6,6 +6,89 @@ Sheetsee,js uses this module to make tables. With this module you can create tab
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
 
+## Quick start
+
+This example starts with an array of spreadsheet rows and turns it into a
+sortable, searchable table.
+
+### 1. Add your data
+
+Sheetsee tables expect an array of objects. If you are loading a Google
+Spreadsheet through Tabletop.js, pass the rows that Tabletop returns. For a
+small local test, a plain array works too:
+
+```javascript
+var data = [
+  {City: 'Oakland', PlaceName: 'Lake Merritt', Year: '1870'},
+  {City: 'San Francisco', PlaceName: 'Sutro Baths', Year: '1896'},
+  {City: 'Los Angeles', PlaceName: 'Griffith Park', Year: '1896'}
+]
+```
+
+### 2. Add a filter input and table placeholder
+
+The filter input is optional. If you include it, the `filterDiv` option in
+your script must point to the input id. The clear link must use the `clear`
+class.
+
+```html
+<input id="siteTableFilter" type="text" placeholder="filter by city or place">
+<a href="#" class="clear">Clear</a>
+<div id="siteTable"></div>
+```
+
+### 3. Add the table template
+
+The template id must match the `templateID` option used in your script. Header
+text controls sorting, so keep the same capitalization as the spreadsheet
+column names, ignoring spaces.
+
+```html
+<script id="siteTable_template" type="text/html">
+  <table>
+    <tr>
+      <th class="tHeader">City</th>
+      <th class="tHeader">Place Name</th>
+      <th class="tHeader">Year</th>
+    </tr>
+    {{#rows}}
+      <tr>
+        <td>{{City}}</td>
+        <td>{{PlaceName}}</td>
+        <td>{{Year}}</td>
+      </tr>
+    {{/rows}}
+  </table>
+</script>
+```
+
+### 4. Build the table
+
+Call `Sheetsee.makeTable()` after the page and data are ready. Then call
+`Sheetsee.initiateTableFilter()` if you included the filter input.
+
+```html
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var tableOptions = {
+      data: data,
+      pagination: 10,
+      tableDiv: '#siteTable',
+      filterDiv: '#siteTableFilter',
+      templateID: 'siteTable_template'
+    }
+
+    Sheetsee.makeTable(tableOptions)
+    Sheetsee.initiateTableFilter(tableOptions)
+  })
+</script>
+```
+
+If the table does not render, first check that `tableDiv` points to an
+existing placeholder and `templateID` exactly matches your template script id.
+If filtering does not work, check that `filterDiv` points to the input id and
+that the clear link has `class="clear"`.
+
 ## Your HTML Placeholder
 
 This is as simple as an empty `<div>` with an `id`.
@@ -84,8 +167,8 @@ _CSS_
 If you want to have an input to allow users to search/filter the data in the table, you'll add an input to your HTML. Give it an id and if you want add placeholder text. You'll also need to add a 'clear' button using the `.clear` CSS class.
 
 ```javascript
-<input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<input id="tableFilter" type="text" placeholder="filter by..">
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,14 +182,14 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
