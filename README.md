@@ -6,6 +6,70 @@ Sheetsee,js uses this module to make tables. With this module you can create tab
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
 
+## Quick Start
+
+This is a complete copy-and-paste example using local data. When you replace the
+`data` array with Tabletop.js or another spreadsheet source, keep the option
+names and template `id` values the same.
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sheetsee Table Quick Start</title>
+    <script src="sheetsee.js"></script>
+  </head>
+  <body>
+    <input id="siteTableFilter" type="text" placeholder="filter by city">
+    <a href="#" class="clear">Clear</a>
+    <div id="siteTable"></div>
+
+    <script id="siteTable_template" type="text/html">
+      <table>
+        <tr>
+          <th class="tHeader">City</th>
+          <th class="tHeader">Place Name</th>
+          <th class="tHeader">Year</th>
+        </tr>
+        {{#rows}}
+          <tr>
+            <td>{{City}}</td>
+            <td>{{PlaceName}}</td>
+            <td>{{Year}}</td>
+          </tr>
+        {{/rows}}
+      </table>
+    </script>
+
+    <script>
+      var data = [
+        { City: 'Oakland', PlaceName: 'Lake Merritt', Year: '2017' },
+        { City: 'Portland', PlaceName: 'Laurelhurst Park', Year: '2018' },
+        { City: 'Chicago', PlaceName: 'Millennium Park', Year: '2019' }
+      ]
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var tableOptions = {
+          data: data,
+          pagination: 2,
+          tableDiv: '#siteTable',
+          filterDiv: '#siteTableFilter',
+          templateID: 'siteTable_template'
+        }
+
+        Sheetsee.makeTable(tableOptions)
+        Sheetsee.initiateTableFilter(tableOptions)
+      })
+    </script>
+  </body>
+</html>
+```
+
+The placeholder id is `siteTable`, so the default template id would be
+`siteTable_template`. You can either use that default or pass the same value
+explicitly with `templateID`.
+
 ## Your HTML Placeholder
 
 This is as simple as an empty `<div>` with an `id`.
@@ -85,7 +149,7 @@ If you want to have an input to allow users to search/filter the data in the tab
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,14 +163,14 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"></input><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
