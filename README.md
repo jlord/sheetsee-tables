@@ -32,6 +32,8 @@ You can then style `.tHeader` in your CSS to make them look how you want.
 
 You'll want to set your table options and pass them into `Sheetsee.makeTable()`. If you want to add a search/filter, pass your options into `Sheetsee.initiateTableFilter()`.
 
+For a step-by-step setup guide, see [MANUAL.md](MANUAL.md).
+
 ## Methods
 
 Functions for you to use! There are just two, woo!
@@ -85,7 +87,7 @@ If you want to have an input to allow users to search/filter the data in the tab
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,14 +101,14 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"></input><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
