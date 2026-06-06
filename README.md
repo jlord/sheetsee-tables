@@ -6,6 +6,160 @@ Sheetsee,js uses this module to make tables. With this module you can create tab
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
 
+## Step-by-Step Manual
+
+This walkthrough starts with spreadsheet-style data and ends with a searchable, sortable, paginated table.
+
+### 1. Prepare your spreadsheet data
+
+Sheetsee expects an array of objects. Each object is one row, and each object key is one spreadsheet column.
+
+```javascript
+var data = [
+  {
+    "Animal": "Cat",
+    "Name": "Liza",
+    "Rating": "10"
+  },
+  {
+    "Animal": "Dog",
+    "Name": "Boo",
+    "Rating": "9"
+  },
+  {
+    "Animal": "Cat",
+    "Name": "Snowy",
+    "Rating": "4"
+  }
+]
+```
+
+If you are using Tabletop.js, pass the array returned from your published spreadsheet in this same shape.
+
+### 2. Load Sheetsee and your data
+
+Include the browserified Sheetsee bundle and the data file before the script that builds your table.
+
+```HTML
+<script src="sheetsee.js"></script>
+<script src="data.js"></script>
+```
+
+### 3. Add a search input and table placeholder
+
+The input is optional, but the table placeholder is required. The `tableDiv` option will point to this placeholder.
+
+```HTML
+<input id="animalTableFilter" type="text" placeholder="filter by..">
+<a href="#" class="clear">Clear</a>
+<div id="animalTable"></div>
+```
+
+### 4. Add a Mustache table template
+
+The default template id convention is the placeholder id plus `_template`. For `animalTable`, the template id should be `animalTable_template`.
+
+Use `{{#rows}}` to loop through the rows Sheetsee sends to the template.
+
+```HTML
+<script id="animalTable_template" type="text/html">
+  <table>
+    <tr>
+      <th class="tHeader">Animal</th>
+      <th class="tHeader">Name</th>
+      <th class="tHeader">Rating</th>
+    </tr>
+    {{#rows}}
+      <tr>
+        <td>{{Animal}}</td>
+        <td>{{Name}}</td>
+        <td>{{Rating}}</td>
+      </tr>
+    {{/rows}}
+  </table>
+</script>
+```
+
+The `tHeader` class makes a column sortable. The header text must match the spreadsheet key after spaces and punctuation are removed, so `Place Name` works with `PlaceName`.
+
+### 5. Build the table
+
+Create the table options after the page loads, then call `Sheetsee.makeTable()`.
+
+```HTML
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var tableOptions = {
+      data: data,
+      pagination: 10,
+      tableDiv: '#animalTable',
+      filterDiv: '#animalTableFilter'
+    }
+
+    Sheetsee.makeTable(tableOptions)
+    Sheetsee.initiateTableFilter(tableOptions)
+  })
+</script>
+```
+
+Leave out `pagination` to show all rows at once. Leave out `filterDiv` and `Sheetsee.initiateTableFilter(tableOptions)` if you do not need search.
+
+### 6. Try sorting, filtering, and pagination
+
+- Click a header with `class="tHeader"` to sort that column.
+- Type in the filter input to search across the row data.
+- Use the pagination links that Sheetsee appends below the table when the number of rows is larger than `pagination`.
+
+### Complete HTML Example
+
+```HTML
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sheetsee table example</title>
+    <script src="sheetsee.js"></script>
+    <script src="data.js"></script>
+  </head>
+  <body>
+    <input id="animalTableFilter" type="text" placeholder="filter by..">
+    <a href="#" class="clear">Clear</a>
+    <div id="animalTable"></div>
+
+    <script id="animalTable_template" type="text/html">
+      <table>
+        <tr>
+          <th class="tHeader">Animal</th>
+          <th class="tHeader">Name</th>
+          <th class="tHeader">Rating</th>
+        </tr>
+        {{#rows}}
+          <tr>
+            <td>{{Animal}}</td>
+            <td>{{Name}}</td>
+            <td>{{Rating}}</td>
+          </tr>
+        {{/rows}}
+      </table>
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var tableOptions = {
+          data: data,
+          pagination: 10,
+          tableDiv: '#animalTable',
+          filterDiv: '#animalTableFilter'
+        }
+
+        Sheetsee.makeTable(tableOptions)
+        Sheetsee.initiateTableFilter(tableOptions)
+      })
+    </script>
+  </body>
+</html>
+```
+
 ## Your HTML Placeholder
 
 This is as simple as an empty `<div>` with an `id`.
@@ -85,7 +239,7 @@ If you want to have an input to allow users to search/filter the data in the tab
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,14 +253,14 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"></input><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
