@@ -2,9 +2,62 @@
 
 # sheetsee-tables
 
-Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
+Sheetsee.js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
+
+## Step-by-step working table
+
+1. Add the table filter, clear link and table placeholder to your HTML.
+
+```html
+<input id="siteTableFilter" type="text" placeholder="filter by...">
+<a href="#" class="clear">Clear</a>
+<div id="siteTable"></div>
+```
+
+2. Add a Mustache template. The default template id is your table div id plus `_template`, so `#siteTable` uses `siteTable_template`.
+
+```html
+<script id="siteTable_template" type="text/html">
+  <table>
+    <tr>
+      <th class="tHeader">City</th>
+      <th class="tHeader">Place Name</th>
+      <th class="tHeader">Year</th>
+      <th class="tHeader">Image</th>
+    </tr>
+    {{#rows}}
+      <tr>
+        <td>{{city}}</td>
+        <td>{{placename}}</td>
+        <td>{{year}}</td>
+        <td>{{image}}</td>
+      </tr>
+    {{/rows}}
+  </table>
+</script>
+```
+
+3. Pass your spreadsheet rows to `Sheetsee.makeTable()`. If you are using a filter input, call `Sheetsee.initiateTableFilter()` with the same options.
+
+```html
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var tableOptions = {
+      data: data,
+      pagination: 10,
+      tableDiv: '#siteTable',
+      filterDiv: '#siteTableFilter'
+    }
+
+    Sheetsee.makeTable(tableOptions)
+    Sheetsee.initiateTableFilter(tableOptions)
+  })
+</script>
+```
+
+For a complete runnable example, run `npm install`, then `npm run bfy`, and open `test/index.html`.
 
 ## Your HTML Placeholder
 
@@ -83,9 +136,9 @@ _CSS_
 
 If you want to have an input to allow users to search/filter the data in the table, you'll add an input to your HTML. Give it an id and if you want add placeholder text. You'll also need to add a 'clear' button using the `.clear` CSS class.
 
-```javascript
+```html
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,14 +152,15 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text">
+<a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
-```JavaScript
-<script id="tableTemplate" type="text/html">
+```html
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
@@ -118,7 +172,7 @@ _Template_
 
 _JavaScript_
 
-```javascript
+```html
 <script type="text/javascript">
   document.addEventListener('DOMContentLoaded', function() {
     var tableOptions = {
@@ -134,5 +188,5 @@ _JavaScript_
 </script>
 ```
 
-_[View Demo](http://jlord.us/sheetsee.js/demos/demo-table.html)_
-_[Visit Site](http://jlord.us/sheetsee.js)_
+_[Run local demo](test/index.html)_
+_[Visit Site](https://jlord.us/sheetsee.js)_
