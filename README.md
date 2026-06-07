@@ -2,9 +2,104 @@
 
 # sheetsee-tables
 
-Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
+Sheetsee.js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
+
+## Step-by-step table setup
+
+Use this checklist when you want to create a table view from spreadsheet data.
+
+### 1. Add a placeholder for the table
+
+The placeholder is where Sheetsee will render the table.
+
+```html
+<div id="siteTable"></div>
+```
+
+### 2. Add an optional search input
+
+If you want search/filter behavior, add an input and a clear link.
+
+```html
+<input id="siteTableFilter" type="text" placeholder="Filter by city or place">
+<a href="#" class="clear">Clear</a>
+```
+
+### 3. Add data
+
+Sheetsee expects an array of objects. Each object key becomes a field you can use in the table template.
+
+```javascript
+var data = [
+  { city: 'Oakland', placename: 'Lake Merritt', year: '1870' },
+  { city: 'San Francisco', placename: 'Sutro Baths', year: '1896' },
+  { city: 'Portland', placename: 'Forest Park', year: '1948' }
+]
+```
+
+### 4. Add a Mustache template
+
+The default template id is the table placeholder id plus `_template`. For a placeholder named `siteTable`, use `siteTable_template`.
+
+```html
+<script id="siteTable_template" type="text/html">
+  <table>
+    <tr>
+      <th class="tHeader">City</th>
+      <th class="tHeader">Place Name</th>
+      <th class="tHeader">Year</th>
+    </tr>
+    {{#rows}}
+      <tr>
+        <td>{{city}}</td>
+        <td>{{placename}}</td>
+        <td>{{year}}</td>
+      </tr>
+    {{/rows}}
+  </table>
+</script>
+```
+
+### 5. Build and filter the table
+
+Pass the same placeholder, filter input, and template id into Sheetsee.
+
+```javascript
+document.addEventListener('DOMContentLoaded', function () {
+  var tableOptions = {
+    data: data,
+    pagination: 10,
+    tableDiv: '#siteTable',
+    filterDiv: '#siteTableFilter',
+    templateID: 'siteTable_template'
+  }
+
+  Sheetsee.makeTable(tableOptions)
+  Sheetsee.initiateTableFilter(tableOptions)
+})
+```
+
+### 6. Run the included local demo
+
+The repo includes a small local demo under `test/`.
+
+```bash
+npm install
+npm run bfy
+open test/index.html
+```
+
+If you are not on macOS, open `test/index.html` manually in your browser after running `npm run bfy`.
+
+## Troubleshooting
+
+- If the table is blank, confirm the template id matches `templateID`.
+- If sorting does not work, confirm the header cells have the `tHeader` class.
+- If sorting picks the wrong field, make sure table header text matches the data key after removing spaces. For example, `Place Name` maps to `PlaceName`.
+- If filtering does not work, confirm `filterDiv` matches the input id and the clear link uses `class="clear"`.
+- If pagination links do not appear, confirm `pagination` is set to a number smaller than the data row count.
 
 ## Your HTML Placeholder
 
@@ -85,7 +180,7 @@ If you want to have an input to allow users to search/filter the data in the tab
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,14 +194,14 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"></input><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
