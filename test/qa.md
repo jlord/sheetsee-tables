@@ -17,8 +17,7 @@ npm run bfy
   - [ ] Sorting while filtering shouldn't reset
   - [ ] Filtering shouldn't mess up pagination
 - [ ] **No Matches** Typing jibberish returns empty table
-- [ ] **One page of pagination** Should change pagaination dom
+- [ ] **One page of pagination** Should change pagination DOM
 - [ ] **Clear** Clear button should clear filter and all data returns
 - [ ] **Sort** Click the arrows in Rating and table sorts
 - [ ] **Pagination** Should be able to navigate between two pages
-  - [ ] **Pagination** Should be able to navigate between two pages
