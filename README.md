@@ -136,3 +136,133 @@ _JavaScript_
 
 _[View Demo](http://jlord.us/sheetsee.js/demos/demo-table.html)_
 _[Visit Site](http://jlord.us/sheetsee.js)_
+
+## Step-by-step manual
+
+Use this checklist when you want to turn spreadsheet rows into a searchable,
+sortable table.
+
+### 1. Prepare the spreadsheet
+
+Create one header row and keep the header names simple. Sheetsee normalizes
+headers into lowercase keys, so a spreadsheet header named `PlaceName` is read
+in templates as `{{placename}}`.
+
+Example sheet:
+
+| City | PlaceName | Year | Image |
+| --- | --- | --- | --- |
+| Portland | Powell's City of Books | 1971 | books.jpg |
+| Detroit | Belle Isle Aquarium | 1904 | aquarium.jpg |
+
+If you use a Google Sheet with Tabletop.js, publish the sheet or make sure the
+sheet is readable by the page that loads it.
+
+### 2. Add the page elements
+
+Add a filter input, a clear link and an empty table container. The container id
+is the value you will pass as `tableDiv`.
+
+```html
+<input id="siteTableFilter" type="text" placeholder="Filter by city, place or year">
+<a href="#" class="clear">Clear</a>
+<div id="siteTable"></div>
+```
+
+### 3. Add a Mustache table template
+
+Create a `<script>` template for the rows. Header cells with the class
+`tHeader` become sortable. Header text should match the spreadsheet column name
+closely enough for Sheetsee to map it back to the data key.
+
+```html
+<script id="siteTable_template" type="text/html">
+  <table>
+    <thead>
+      <tr>
+        <th class="tHeader">City</th>
+        <th class="tHeader">Place Name</th>
+        <th class="tHeader">Year</th>
+        <th>Image</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#rows}}
+        <tr>
+          <td>{{city}}</td>
+          <td>{{placename}}</td>
+          <td>{{year}}</td>
+          <td>{{image}}</td>
+        </tr>
+      {{/rows}}
+    </tbody>
+  </table>
+</script>
+```
+
+### 4. Load data and build the table
+
+If you already have an array of row objects, pass it directly to
+`Sheetsee.makeTable()`.
+
+```html
+<script>
+  var data = [
+    { city: 'Portland', placename: "Powell's City of Books", year: '1971', image: 'books.jpg' },
+    { city: 'Detroit', placename: 'Belle Isle Aquarium', year: '1904', image: 'aquarium.jpg' }
+  ]
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var tableOptions = {
+      data: data,
+      pagination: 10,
+      tableDiv: '#siteTable',
+      filterDiv: '#siteTableFilter',
+      templateID: 'siteTable_template'
+    }
+
+    Sheetsee.makeTable(tableOptions)
+    Sheetsee.initiateTableFilter(tableOptions)
+  })
+</script>
+```
+
+When using Tabletop.js, call `Sheetsee.makeTable()` only after Tabletop has
+returned spreadsheet rows:
+
+```html
+<script>
+  function showInfo(data) {
+    var tableOptions = {
+      data: data,
+      pagination: 10,
+      tableDiv: '#siteTable',
+      filterDiv: '#siteTableFilter',
+      templateID: 'siteTable_template'
+    }
+
+    Sheetsee.makeTable(tableOptions)
+    Sheetsee.initiateTableFilter(tableOptions)
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    Tabletop.init({
+      key: 'YOUR_PUBLIC_SPREADSHEET_KEY',
+      callback: showInfo,
+      simpleSheet: true
+    })
+  })
+</script>
+```
+
+### 5. Check the result
+
+- If the table is empty, log `data` before calling `Sheetsee.makeTable()` and
+  confirm it is an array of objects.
+- If sorting does not work, confirm each sortable header has `class="tHeader"`.
+- If a column is blank, compare the spreadsheet header with the Mustache key.
+  `PlaceName` should be rendered as `{{placename}}`.
+- If filtering does not work, make sure `filterDiv` includes the hash and points
+  to the input id, for example `#siteTableFilter`.
+- If pagination is not visible, confirm `pagination` is a number smaller than
+  the total row count.
