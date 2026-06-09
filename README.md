@@ -32,6 +32,67 @@ You can then style `.tHeader` in your CSS to make them look how you want.
 
 You'll want to set your table options and pass them into `Sheetsee.makeTable()`. If you want to add a search/filter, pass your options into `Sheetsee.initiateTableFilter()`.
 
+## Step-by-step demo
+
+1. Install the package in your project.
+
+```bash
+npm install sheetsee-tables
+```
+
+2. Bundle the module for the browser.
+
+```javascript
+var Sheetsee = require('sheetsee-tables')
+window.Sheetsee = Sheetsee
+```
+
+3. Add a filter input, clear link, and empty table placeholder to your HTML.
+
+```HTML
+<input id="siteTableFilter" type="text" placeholder="filter by.."></input>
+<a href="#" class="clear">Clear</a>
+<div id="siteTable"></div>
+```
+
+4. Add a Mustache template whose id matches the `templateID` option.
+
+```HTML
+<script id="siteTable_template" type="text/html">
+  <table>
+    <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th></tr>
+    {{#rows}}
+      <tr><td>{{city}}</td><td>{{placename}}</td><td>{{year}}</td></tr>
+    {{/rows}}
+  </table>
+</script>
+```
+
+5. Build the table after your data is available.
+
+```javascript
+document.addEventListener('DOMContentLoaded', function() {
+  var tableOptions = {
+    "data": data,
+    "pagination": 10,
+    "tableDiv": "#siteTable",
+    "filterDiv": "#siteTableFilter",
+    "templateID": "siteTable_template"
+  }
+  Sheetsee.makeTable(tableOptions)
+  Sheetsee.initiateTableFilter(tableOptions)
+})
+```
+
+To run the included demo in this repository, install dependencies and build the browser bundle first:
+
+```bash
+npm install
+npm run bfy
+```
+
+Then open `test/index.html` in a browser.
+
 ## Methods
 
 Functions for you to use! There are just two, woo!
@@ -85,7 +146,7 @@ If you want to have an input to allow users to search/filter the data in the tab
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -106,7 +167,7 @@ _HTML_
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
