@@ -2,21 +2,74 @@
 
 # sheetsee-tables
 
-Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
+Sheetsee.js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
 
-## Your HTML Placeholder
+## Quick Start
+
+To create a searchable and sortable table, follow these steps in order:
+
+1. **HTML Placeholders**: Create an input for filtering, a clear button, and a div for the table.
+   ```html
+   <input id="siteTableFilter" type="text" placeholder="Filter by city or name...">
+   <a href="#" class="clear">Clear</a>
+   <div id="siteTable"></div>
+   ```
+
+2. **Mustache Template**: Define how your row should look. Ensure the `id` is the placeholder ID + `_template`.
+   ```html
+   <script id="siteTable_template" type="text/html">
+     <table>
+       <tr>
+         <th class="tHeader">City</th>
+         <th class="tHeader">Place Name</th>
+         <th class="tHeader">Year</th>
+       </tr>
+       {{#rows}}
+         <tr>
+           <td>{{city}}</td>
+           <td>{{placename}}</td>
+           <td>{{year}}</td>
+         </tr>
+       {{/rows}}
+     </table>
+   </script>
+   ```
+
+3. **JavaScript Configuration**: Pass the options to `Sheetsee.makeTable()` and `Sheetsee.initiateTableFilter()`.
+   ```javascript
+   var tableOptions = {
+     "data": yourDataArray,
+     "pagination": 10,
+     "tableDiv": "#siteTable",
+     "filterDiv": "#siteTableFilter",
+     "templateID": "siteTable_template"
+   };
+   Sheetsee.makeTable(tableOptions);
+   Sheetsee.initiateTableFilter(tableOptions);
+   ```
+
+### Troubleshooting
+- **Empty Table?** Check that your `data` array is populated before calling `makeTable`.
+- **Sorting not working?** Ensure your `<th>` tags have the class `tHeader` and exactly match the spreadsheet column names (case-sensitive).
+- **Template not loading?** Verify that `templateID` matches the ID of your `<script>` tag exactly.
+
+---
+
+## Detailed Guide
+
+### Your HTML Placeholder
 
 This is as simple as an empty `<div>` with an `id`.
 
-## Your Template
+### Your Template
 
 Your template is the mockup of what you'd like your table to look like and what content it should show. The style is up to you! It is a [mustache](https://mustache.github.io) template inside of `<script>` tags.
 
 **The `id` of the template should be the same as the HTML placeholder it corresponds to but with "_template" on the end.**
 
-### Sorting
+#### Sorting
 
 If you want users to be able to click on headers and sort that column, your template must include table headers with the class `tHeader`.
 
@@ -81,11 +134,11 @@ _CSS_
 
 ### `Sheetsee.initiateTableFilter(tableOptions)`
 
-If you want to have an input to allow users to search/filter the data in the table, you'll add an input to your HTML. Give it an id and if you want add placeholder text. You'll also need to add a 'clear' button using the `.clear` CSS class.
+If you want to have an input to allow users to search/filter the data in the table, you'll add an input to your HTML. Give it an id and if you want add placeholder text. You'll also need to add a 'clear' button using the `clear` CSS class.
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,14 +152,14 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"></input><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
