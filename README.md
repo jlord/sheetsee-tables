@@ -6,6 +6,65 @@ Sheetsee,js uses this module to make tables. With this module you can create tab
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
 
+## Step-by-step guide
+
+The following is a complete minimal example. It renders a sortable, searchable,
+two-row-per-page table from an in-memory array. Save it as `index.html` next to
+the browserified Sheetsee bundle.
+
+1. Install the module and build the browser bundle:
+
+   ```bash
+   npm install
+   npx browserify index.js -o sheetsee.js
+   ```
+
+2. Create an HTML placeholder, filter input, and Mustache template:
+
+   ```html
+   <input id="peopleFilter" type="search" placeholder="Filter people">
+   <a href="#" class="clear">Clear</a>
+   <div id="peopleTable"></div>
+
+   <script id="peopleTable_template" type="text/html">
+     <table>
+       <tr><th class="tHeader">Name</th><th class="tHeader">City</th></tr>
+       {{#rows}}
+         <tr><td>{{Name}}</td><td>{{City}}</td></tr>
+       {{/rows}}
+     </table>
+   </script>
+   ```
+
+3. Load the data and initialize Sheetsee after the page has loaded:
+
+   ```html
+   <script src="sheetsee.js"></script>
+   <script>
+     var data = [
+       {"Name": "Ada", "City": "London"},
+       {"Name": "Grace", "City": "New York"},
+       {"Name": "Linus", "City": "Helsinki"}
+     ]
+
+     document.addEventListener('DOMContentLoaded', function () {
+       var tableOptions = {
+         data: data,
+         pagination: 2,
+         tableDiv: '#peopleTable',
+         filterDiv: '#peopleFilter'
+       }
+       Sheetsee.makeTable(tableOptions)
+       Sheetsee.initiateTableFilter(tableOptions)
+     })
+   </script>
+   ```
+
+The `tHeader` class enables sorting. Header text is matched to the spreadsheet
+key after spaces are removed, so `First Name` maps to `FirstName`. Pagination
+is optional; omit `pagination` to render every row at once. The `clear` class
+enables the built-in filter reset link.
+
 ## Your HTML Placeholder
 
 This is as simple as an empty `<div>` with an `id`.
