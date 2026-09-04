@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>sheetsee-tables — working example</title>
+  <style>
+    body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; margin: 2rem; }
+    table { border-collapse: collapse; margin-top: 1rem; }
+    th, td { border: 1px solid #ccc; padding: 6px 12px; text-align: left; }
+    th.tHeader { cursor: pointer; background: #eee; user-select: none; }
+    th.tHeader:hover { background: #ddd; }
+    img { max-width: 80px; border-radius: 4px; }
+    .table-pagination { margin-top: 1rem; }
+    .no-pag { color: #999; pointer-events: none; }
+    a { cursor: pointer; margin: 0 6px; }
+  </style>
+</head>
+<body>
+  <h1>sheetsee-tables working example</h1>
+  <p>Type to filter, click a column header to sort.</p>
+
+  <!-- search / filter -->
+  <input id="siteTableFilter" type="text" placeholder="filter by city or name…">
+  <a href="#" class="clear">Clear</a>
+
+  <!-- the table is rendered into this empty div -->
+  <div id="siteTable"></div>
+
+  <!-- Mustache template; id must be <tableDiv> + "_template" -->
+  <script id="siteTable_template" type="text/html">
+    <table>
+      <thead>
+        <tr>
+          <th class="tHeader">City</th>
+          <th class="tHeader">Place Name</th>
+          <th class="tHeader">Year</th>
+          <th>Image</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#rows}}
+          <tr>
+            <td>{{city}}</td>
+            <td>{{placename}}</td>
+            <td>{{year}}</td>
+            <td><img src="{{image}}" alt="{{placename}}"></td>
+          </tr>
+        {{/rows}}
+      </tbody>
+    </table>
+  </script>
+
+  <!-- the bundled library (built with: browserify index.js --standalone Sheetsee -o dist/sheetsee-tables.js) -->
+  <script src="../dist/sheetsee-tables.js"></script>
+
+  <script>
+    // Sample data. In a real app this comes from Tabletop.js / your spreadsheet.
+    var data = [
+      { city: 'Paris', placename: 'Eiffel Tower', year: '1889', image: 'https://placehold.co/80x60?text=Eiffel' },
+      { city: 'London', placename: 'Big Ben', year: '1859', image: 'https://placehold.co/80x60?text=Big+Ben' },
+      { city: 'New York', placename: 'Statue of Liberty', year: '1886', image: 'https://placehold.co/80x60?text=Liberty' },
+      { city: 'Rome', placename: 'Colosseum', year: '80', image: 'https://placehold.co/80x60?text=Colosseum' },
+      { city: 'Cairo', placename: 'Great Pyramid', year: '2560', image: 'https://placehold.co/80x60?text=Pyramid' },
+      { city: 'Sydney', placename: 'Opera House', year: '1973', image: 'https://placehold.co/80x60?text=Opera' },
+      { city: 'Rio', placename: 'Christ the Redeemer', year: '1931', image: 'https://placehold.co/80x60?text=Cristo' },
+      { city: 'Tokyo', placename: 'Tokyo Tower', year: '1958', image: 'https://placehold.co/80x60?text=Tower' },
+      { city: 'Barcelona', placename: 'Sagrada Familia', year: '1882', image: 'https://placehold.co/80x60?text=Sagrada' },
+      { city: 'San Francisco', placename: 'Golden Gate Bridge', year: '1937', image: 'https://placehold.co/80x60?text=Golden' },
+      { city: 'Dubai', placename: 'Burj Khalifa', year: '2010', image: 'https://placehold.co/80x60?text=Burj' },
+      { city: 'Athens', placename: 'Parthenon', year: '432', image: 'https://placehold.co/80x60?text=Parthenon' }
+    ];
+
+    var tableOptions = {
+      data: data,          // your data (array of objects) — required
+      pagination: 5,       // rows per page (omit to show all)
+      tableDiv: '#siteTable',           // the empty div — required
+      filterDiv: '#siteTableFilter',    // the search input — required only if filtering
+      templateID: 'siteTable_template'  // the <script> template id
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+      Sheetsee.makeTable(tableOptions);
+      Sheetsee.initiateTableFilter(tableOptions);
+    });
+  </script>
+</body>
+</html>
