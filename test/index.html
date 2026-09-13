@@ -15,11 +15,14 @@
     .no-pag {color: #acacac; border: none;}
     .no-pag:hover {color: #acacac;}
     input {border: none; border-bottom: 1px solid #333; margin: 10px 0px; width: 200px; padding-bottom: 6px;}
+    .hint {color: #555; max-width: 40em;}
+    code {background: #f4f4f4; padding: 1px 4px;}
   </style>
 
   <body>
     <div class="container">
       <h1>All Pennies</h1>
+      <p class="hint">Local self-contained demo for <code>sheetsee-tables</code>. Run <code>npm run bfy</code> from the repo root, then serve this <code>test/</code> folder. See <code>qa.md</code>.</p>
       <input id="fullTableFilter" type="text" placeholder="filter by.."></input>
       <a href="#" class="clear">Clear</a>
       <div id="fullTable"></div>
