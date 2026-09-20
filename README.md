@@ -2,9 +2,125 @@
 
 # sheetsee-tables
 
-Sheetsee,js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
+Sheetsee.js uses this module to make tables. With this module you can create tables with your spreadsheet data that are sortable, searchable and paginate-able.
 
-You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
+This package renders an array of objects. Loading data from a spreadsheet is a separate step. The guide below shows the complete path from a public Google Sheet to a working table.
+
+## Google Sheets quick start
+
+### 1. Prepare the sheet
+
+Use the first row for column names. This example expects `City`, `PlaceName`, and `Year`. In Google Sheets, share the sheet so that anyone with the link can view it, then copy the ID between `/d/` and `/edit` in its URL.
+
+### 2. Install and build
+
+Create an empty project folder, then install this package and Browserify:
+
+```bash
+npm install sheetsee-tables
+npm install --save-dev browserify
+```
+
+Create `index.html`:
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Places</title>
+  </head>
+  <body>
+    <label for="siteTableFilter">Filter places</label>
+    <input id="siteTableFilter" type="search">
+    <button class="clear" type="button">Clear</button>
+    <div id="siteTable"></div>
+
+    <script id="siteTable_template" type="text/html">
+      <table>
+        <thead>
+          <tr>
+            <th class="tHeader">City</th>
+            <th class="tHeader">Place Name</th>
+            <th class="tHeader">Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#rows}}
+            <tr>
+              <td>{{City}}</td>
+              <td>{{PlaceName}}</td>
+              <td>{{Year}}</td>
+            </tr>
+          {{/rows}}
+        </tbody>
+      </table>
+    </script>
+    <script src="bundle.js"></script>
+  </body>
+</html>
+```
+
+The template ID is `siteTable_template` because the table placeholder is `siteTable`. The default naming rule is `<tableDiv>_template`.
+
+### 3. Load the sheet and render the table
+
+Create `app.js` and replace `YOUR_SHEET_ID` with the ID from step 1:
+
+```javascript
+var Sheetsee = require('sheetsee-tables')
+var sheetID = 'YOUR_SHEET_ID'
+var sheetName = 'Sheet1'
+
+function loadSheet () {
+  var url = 'https://docs.google.com/spreadsheets/d/' + sheetID +
+    '/gviz/tq?tqx=out:json&sheet=' + encodeURIComponent(sheetName)
+
+  return window.fetch(url)
+    .then(function (response) {
+      if (!response.ok) throw new Error('Could not load the sheet')
+      return response.text()
+    })
+    .then(function (text) {
+      var payload = JSON.parse(text.slice(text.indexOf('(') + 1, text.lastIndexOf(')')))
+      var columns = payload.table.cols.map(function (column) { return column.label })
+
+      return payload.table.rows.map(function (row) {
+        var item = {}
+        columns.forEach(function (column, index) {
+          item[column] = row.c[index] ? row.c[index].v : ''
+        })
+        return item
+      })
+    })
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  loadSheet()
+    .then(function (data) {
+      var tableOptions = {
+        data: data,
+        pagination: 10,
+        tableDiv: '#siteTable',
+        filterDiv: '#siteTableFilter'
+      }
+
+      Sheetsee.makeTable(tableOptions)
+      Sheetsee.initiateTableFilter(tableOptions)
+    })
+    .catch(function (error) {
+      document.getElementById('siteTable').textContent = error.message
+    })
+})
+```
+
+Build the browser bundle, then open `index.html`:
+
+```bash
+npx browserify app.js -o bundle.js
+```
+
+Click a column heading to sort, type in the filter field to search, or use the pagination links to move between pages.
 
 ## Your HTML Placeholder
 
@@ -83,9 +199,9 @@ _CSS_
 
 If you want to have an input to allow users to search/filter the data in the table, you'll add an input to your HTML. Give it an id and if you want add placeholder text. You'll also need to add a 'clear' button using the `.clear` CSS class.
 
-```javascript
-<input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+```html
+<input id="tableFilter" type="search" placeholder="filter by..">
+<button type="button" class="clear">Clear</button>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -98,19 +214,20 @@ Sheetsee.initiateTableFilter(tableOptions)
 
 _HTML_
 
-```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+```html
+<input id="siteTableFilter" type="search">
+<button type="button" class="clear">Clear</button>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
-```JavaScript
-<script id="tableTemplate" type="text/html">
+```html
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
-        <tr><td>{{city}}</td><td>{{placename}}</td><td>{{year}}</td><td>{{image}}</td></tr>
+        <tr><td>{{City}}</td><td>{{PlaceName}}</td><td>{{Year}}</td><td>{{Image}}</td></tr>
       {{/rows}}
   </table>
 </script>
@@ -125,8 +242,7 @@ _JavaScript_
       "data": data,
       "pagination": 10,
       "tableDiv": "#siteTable",
-      "filterDiv": "#siteTableFilter",
-      "templateID": "siteTable_template"
+      "filterDiv": "#siteTableFilter"
     }
     Sheetsee.makeTable(tableOptions)
     Sheetsee.initiateTableFilter(tableOptions)
@@ -134,5 +250,4 @@ _JavaScript_
 </script>
 ```
 
-_[View Demo](http://jlord.us/sheetsee.js/demos/demo-table.html)_
-_[Visit Site](http://jlord.us/sheetsee.js)_
+The `templateID` option is omitted here, so Sheetsee uses `siteTable_template` by default.
