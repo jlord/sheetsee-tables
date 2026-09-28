@@ -6,7 +6,9 @@
   "scripts": {
     "lint": "standard",
     "test": "node test/browserify.js && open test/index.html",
-    "bfy": "node test/browserify.js"
+    "bfy": "node test/browserify.js",
+    "build:example": "browserify example/table.js -o example/bundle.js",
+    "test:csv": "node test/csv.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "browserify": "^14.1.0",
+    "papaparse": "5.5.3",
     "standard": "^8.6.0",
     "watchify": "^3.9.0"
   }
