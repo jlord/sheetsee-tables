@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Spreadsheet to Sheetsee table</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 48rem; margin: 2rem auto; padding: 0 1rem; }
+      label { display: block; margin-top: 1rem; }
+      input, button { font: inherit; padding: .4rem; }
+      #csvSource { width: min(28rem, 90%); }
+      table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+      th, td { text-align: left; border-bottom: 1px solid #ccc; padding: .6rem; }
+      .tHeader { cursor: pointer; font-weight: bold; border: 0; background: transparent; padding: 0; }
+      .table-pagination { margin-top: 1rem; }
+      .table-pagination a { margin-left: 1rem; text-decoration: underline; cursor: pointer; }
+      .no-pag { color: #777; cursor: default !important; }
+      [role="alert"] { color: #9d1717; }
+    </style>
+    <script src="bundle.js" defer></script>
+  </head>
+  <body>
+    <h1>Spreadsheet to Sheetsee table</h1>
+    <p>This example reads <a href="data.csv">data.csv</a>, then renders a searchable, sortable table with two rows per page.</p>
+    <form method="get">
+      <label for="csvSource">CSV address</label>
+      <input id="csvSource" name="csv" value="data.csv" required>
+      <button type="submit">Load CSV</button>
+    </form>
+    <p id="status" role="status">Loading CSV… If this message stays visible, run npm run build:example and reload.</p>
+    <label for="tableFilter">Filter rows</label>
+    <input id="tableFilter" type="text" placeholder="Try Cat or Dog" disabled>
+    <button id="clearFilter" class="clear" type="button" disabled>Clear</button>
+    <div id="exampleTable"></div>
+
+    <script id="exampleTable_template" type="text/html">
+      <table>
+        <caption>Animals from the spreadsheet</caption>
+        <thead>
+          <tr>
+            <th scope="col"><button class="tHeader" type="button">Animal</button></th>
+            <th scope="col"><button class="tHeader" type="button">Name</button></th>
+            <th scope="col"><button class="tHeader" type="button">Rating</button></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#rows}}
+          <tr><td>{{Animal}}</td><td>{{Name}}</td><td>{{Rating}}</td></tr>
+          {{/rows}}
+        </tbody>
+      </table>
+    </script>
+  </body>
+</html>
