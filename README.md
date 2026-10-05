@@ -6,6 +6,29 @@ Sheetsee,js uses this module to make tables. With this module you can create tab
 
 You'll need a placeholder `<div>` in your html, a `<script>` with a [Mustache.js](https://mustache.github.io) template and a `<script>` that tells Sheetsee to build the table.
 
+## Quick Start (step-by-step)
+
+1. Install and build the local demo bundle:
+   ```bash
+   npm install
+   npm run bfy
+   ```
+   This generates `test/sheetsee.js` (gitignored build artifact) from `index.js` via `test/browserify.js`.
+2. Serve the demo locally (the old `jlord.us` demo links are dead — both return 404):
+   ```bash
+   python3 -m http.server 8000 --directory test
+   # open http://localhost:8000/index.html
+   ```
+3. You should see the "All Pennies" table with filter input, Clear link, and
+   `Showing page 1 of 3` pagination. Try the QA checklist in `test/qa.md`:
+   type `cat` in the filter (3 results, 1 page), click a `Rating` header to sort,
+   click Next/Previous to paginate, click Clear to reset.
+4. To build your own table from spreadsheet data (e.g. via Tabletop.js), follow
+   the Placeholder → Template → Script sections below. The two most common
+   copy-paste mistakes are: the template `<script>` `id` must be
+   `<tableDiv>_template` (e.g. `siteTable` → `siteTable_template`), and the
+   clear button uses `class="clear"` (no leading dot).
+
 ## Your HTML Placeholder
 
 This is as simple as an empty `<div>` with an `id`.
@@ -81,11 +104,11 @@ _CSS_
 
 ### `Sheetsee.initiateTableFilter(tableOptions)`
 
-If you want to have an input to allow users to search/filter the data in the table, you'll add an input to your HTML. Give it an id and if you want add placeholder text. You'll also need to add a 'clear' button using the `.clear` CSS class.
+If you want to have an input to allow users to search/filter the data in the table, you'll add an input to your HTML. Give it an id and if you want add placeholder text. You'll also need to add a 'clear' button using the `clear` CSS class (in HTML: `class="clear"`, not `class=".clear"`).
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -99,14 +122,14 @@ Sheetsee.initiateTableFilter(tableOptions)
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"></input><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
@@ -134,5 +157,10 @@ _JavaScript_
 </script>
 ```
 
-_[View Demo](http://jlord.us/sheetsee.js/demos/demo-table.html)_
-_[Visit Site](http://jlord.us/sheetsee.js)_
+## Local demo
+
+Run `npm install && npm run bfy`, then serve `test/` locally
+(`python3 -m http.server 8000 --directory test`) and open
+`http://localhost:8000/index.html`. The previous hosted demo links
+(`jlord.us/sheetsee.js/...`) are dead (404), so the local demo is the
+working reference.
