@@ -1,3 +1,3 @@
-var Sheetsee = window.Sheetsee || {}
-Sheetsee = require('../index.js')
-window.Sheetsee = Sheetsee
+/* global window */
+window.Sheetsee = require('../index.js')
+window.data = require('./data.json')

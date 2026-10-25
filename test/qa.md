@@ -1,24 +1,26 @@
-# Testing
+# Validation
 
-When making edits to `index.js` you can browserify the page and test it with a table demo here.
+From the repository root, run `npm ci --ignore-scripts`, `npm test`,
+`npm run lint`, `npm run bfy`, then `npm start`.
 
-_Todo have browserify watch for changes to `index.js`_
+Open http://127.0.0.1:8080/regressions.html. These checks execute the actual
+bundle in isolated browser frames, including the generated README example.
+All checks should report PASS. A HARNESS ERROR is a failure, not a skipped test.
 
-```bash
-# To browserify and launch test html in browser
-npm test
-# To just re-browserify and refresh in browser manually
-npm run bfy
-```
+Also check the main page manually with the supplied five-row sample:
 
-# QA
+- Two rows on page 1 of 3; Next shows two more, then one on the last page.
+- `Dog` shows Boo and Sam on one page. `cat` shows three rows across two pages.
+- No matches, `[` and `C++` show no results without exceptions; Clear restores
+  the table, and a later normal search works.
+- Name sorts case-insensitively in both directions. Sorting while filtered
+  retains the filter. All sample cell values are strings.
+- The data preview shows exactly the array loaded by the table.
+- Tab to Search, Clear and the column headings; Enter/Space sorts a focused
+  heading. The example's keyboard handler is not a new library API.
+- Convert `test/sample.csv` to a temporary JSON file using the documented
+  command and compare it with `test/data.json`. A custom CSV requires a matching
+  template and required-field check; it is not a live Google Sheets connection.
 
-- [ ] **Filter** Typing 'cat' should return one page with 3 results
-  - [ ] Sorting while filtering shouldn't reset
-  - [ ] Filtering shouldn't mess up pagination
-- [ ] **No Matches** Typing jibberish returns empty table
-- [ ] **One page of pagination** Should change pagaination dom
-- [ ] **Clear** Clear button should clear filter and all data returns
-- [ ] **Sort** Click the arrows in Rating and table sorts
-- [ ] **Pagination** Should be able to navigate between two pages
-  - [ ] **Pagination** Should be able to navigate between two pages
+`npm test` checks the actual CSV parser/CLI, sample round trip, failure exits
+and preservation of output on invalid input. It does not claim browser coverage.

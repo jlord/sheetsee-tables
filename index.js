@@ -94,7 +94,7 @@ function searchTable (searchTerm) {
   var filteredList = []
   tblOpts.data.forEach(function (object) {
     var stringObject = JSON.stringify(object).toLowerCase()
-    if (stringObject.match(searchTerm.toLowerCase())) filteredList.push(object)
+    if (stringObject.indexOf(searchTerm.toLowerCase()) !== -1) filteredList.push(object)
   })
   // Clear direction and page
   if (tblOpts.pgnMta.dir) tblOpts.pgnMta.dir = Number(0)
