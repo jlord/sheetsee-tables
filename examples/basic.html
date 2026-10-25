@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>sheetsee-tables · basic example</title>
+    <style>
+      body { font-family: -apple-system, Helvetica, sans-serif; padding: 40px; }
+      .tHeader::after { content: " ↓ ↑ "; font-size: 10px; padding-left: 3px; cursor: pointer; }
+      #Pagination { border-top: 4px solid #ccf4ff; margin: 10px 0; padding-top: 10px; display: inline-block; }
+      input { border: none; border-bottom: 1px solid #333; width: 200px; padding-bottom: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>Animal ratings</h1>
+    <input id="myTableFilter" type="text" placeholder="filter by..">
+    <a href="#" class="clear">Clear</a>
+    <div id="myTable"></div>
+
+    <!-- built by: npm run bfy (test/browserify.js -> test/sheetsee.js) -->
+    <script src="../test/sheetsee.js"></script>
+
+    <script>
+      var data = [
+        { Animal: 'Cat', Name: 'Liza', Rating: '10' },
+        { Animal: 'Dog', Name: 'Boo', Rating: '9' },
+        { Animal: 'Dog', Name: 'Mia', Rating: '8' },
+        { Animal: 'Cat', Name: 'Tom', Rating: '7' }
+      ]
+    </script>
+
+    <script id="myTable_template" type="text/html">
+      <table>
+        <tr><th class="tHeader">Animal</th><th class="tHeader">Name</th><th class="tHeader">Rating</th></tr>
+        {{#rows}}
+        <tr><td>{{Animal}}</td><td>{{Name}}</td><td>{{Rating}}</td></tr>
+        {{/rows}}
+      </table>
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var tableOptions = {
+          data: data,
+          pagination: 2,
+          tableDiv: '#myTable',
+          filterDiv: '#myTableFilter'
+        }
+        Sheetsee.makeTable(tableOptions)
+        Sheetsee.initiateTableFilter(tableOptions)
+      })
+    </script>
+  </body>
+</html>

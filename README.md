@@ -85,7 +85,7 @@ If you want to have an input to allow users to search/filter the data in the tab
 
 ```javascript
 <input id="tableFilter" type="text" placeholder="filter by.."></input>
-<a href="#" class=".clear">Clear</a>
+<a href="#" class="clear">Clear</a>
 ```
 
 Then you'll pass your `tableOptions` object into this method:
@@ -94,19 +94,74 @@ Then you'll pass your `tableOptions` object into this method:
 Sheetsee.initiateTableFilter(tableOptions)
 ```
 
+## Step-by-step: from a spreadsheet to a table
+
+If the hosted demos are unavailable, build the bundled demo locally:
+
+```bash
+git clone https://github.com/jlord/sheetsee-tables.git
+cd sheetsee-tables
+npm install
+npm run bfy          # builds test/sheetsee.js
+open test/index.html
+```
+
+To wire up your own table:
+
+1. **Add the library.** `<script src="sheetsee.js"></script>` (build it with `npm run bfy`).
+2. **Add a placeholder div.** `<div id="myTable"></div>`
+3. **Add a filter input and a clear button** (optional, only if you use `initiateTableFilter`):
+   ```html
+   <input id="myTableFilter" type="text" placeholder="filter by..">
+   <a href="#" class="clear">Clear</a>
+   ```
+4. **Add a Mustache template.** The template `id` must be the div `id` plus `_template`:
+   ```html
+   <script id="myTable_template" type="text/html">
+     <table>
+       <tr><th class="tHeader">Animal</th><th class="tHeader">Name</th></tr>
+       {{#rows}}
+       <tr><td>{{Animal}}</td><td>{{Name}}</td></tr>
+       {{/rows}}
+     </table>
+   </script>
+   ```
+5. **Call Sheetsee after the DOM is ready:**
+   ```html
+   <script>
+     document.addEventListener('DOMContentLoaded', function () {
+       var tableOptions = {
+         data: data,              // your array of objects
+         pagination: 10,
+         tableDiv: '#myTable',
+         filterDiv: '#myTableFilter'
+       }
+       Sheetsee.makeTable(tableOptions)
+       Sheetsee.initiateTableFilter(tableOptions)
+     })
+   </script>
+   ```
+
+**Common mistakes**
+
+- `class=".clear"` — the class is `clear`, not `.clear`.
+- Template `id` must match `tableDiv` + `_template` (or pass `templateID` explicitly).
+- Header text case and spacing must match the spreadsheet keys: a `"Place Name"` header reads a `PlaceName` field; `PLACENAME` and `placename` will not sort or render correctly.
+- `data` must be an array of objects; the template iterates it with `{{#rows}}`.
+
 ## Example
 
 _HTML_
 
 ```HTML
-<input id="siteTableFilter" type="text"></input><a href="#" class=".clear">Clear</a>
+<input id="siteTableFilter" type="text"></input><a href="#" class="clear">Clear</a>
 <div id="siteTable"></div>
 ```
 
 _Template_
 
 ```JavaScript
-<script id="tableTemplate" type="text/html">
+<script id="siteTable_template" type="text/html">
     <table>
     <tr><th class="tHeader">City</th><th class="tHeader">Place Name</th><th class="tHeader">Year</th><th class="tHeader">Image</th></tr>
       {{#rows}}
@@ -134,5 +189,14 @@ _JavaScript_
 </script>
 ```
 
-_[View Demo](http://jlord.us/sheetsee.js/demos/demo-table.html)_
-_[Visit Site](http://jlord.us/sheetsee.js)_
+### Run the bundled demo locally
+
+```bash
+git clone https://github.com/jlord/sheetsee-tables.git
+cd sheetsee-tables
+npm install
+npm run bfy          # builds test/sheetsee.js
+open test/index.html
+```
+
+The bundled demo lives in `test/` (`data.js`, `index.html`, `sheetsee.js`). The old `jlord.us/sheetsee.js` demo and site are no longer available.
